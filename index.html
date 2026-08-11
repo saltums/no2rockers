@@ -528,13 +528,6 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 <header class="hd">
   <div class="hd-inner">
     <div class="hd-toolbar">
-      <div class="hd-share-wrap">
-        <button class="hd-share-btn" id="siteShareBtn" title="このサイトを共有">↑</button>
-        <div class="site-share-popup" id="siteSharePopup">
-          <a class="sh-line" id="siteShareLine" href="#" target="_blank" rel="noopener">LINE</a>
-          <a class="sh-x" id="siteShareX" href="#" target="_blank" rel="noopener">𝕏</a>
-        </div>
-      </div>
       <button class="hd-search-btn" id="searchBtn" title="出演バンドで絞り込む">🔍</button>
       <a href="https://www.youtube.com/@%E6%B0%B8%E9%81%A0%E3%81%AE%E4%BA%8C%E7%95%AA%E6%89%8B%E3%83%AD%E3%83%83%E3%82%AF%E3%83%95%E3%82%A7%E3%82%B9" class="hd-yt-btn" target="_blank" rel="noopener" title="YouTube チャンネル">▶</a>
       <a href="https://x.com/no2rockers" class="hd-x-btn" target="_blank" rel="noopener" title="@no2rockers on X">𝕏</a>
@@ -948,21 +941,9 @@ EVS.forEach(ev=>{
     <div class="ev-acts">${preview}</div>
     <div class="ev-foot">
       <span class="ev-ticket">${ev.ticket}</span>
-      <span class="ev-foot-share">
-        <a class="sh-pill-line ev-share-link" href="${evLineHref(ev)}" target="_blank" rel="noopener">LINE</a>
-        <a class="sh-pill-x ev-share-link" href="${evXHref(ev)}" target="_blank" rel="noopener">𝕏</a>
-      </span>
-      <button class="ev-cmt-btn">💬</button>
     </div>`;
 
-  el.addEventListener('click',e=>{
-    if(e.target.closest('.ev-cmt-btn,.ev-share-link'))return;
-    openDrawer(ev,false);
-  });
-  el.querySelector('.ev-cmt-btn').addEventListener('click',e=>{
-    e.stopPropagation();
-    openDrawer(ev,true);
-  });
+  el.addEventListener('click',()=>openDrawer(ev,false));
   listEl.appendChild(el);
 });
 
@@ -1365,17 +1346,6 @@ document.getElementById('admSaveBtn').addEventListener('click',()=>{
   if(currentEv)openDrawer(currentEv,false);
 });
 
-// SITE SHARE POPUP
-(function(){
-  const btn=document.getElementById('siteShareBtn');
-  const popup=document.getElementById('siteSharePopup');
-  const siteText='永遠の二番手ロックフェス — 名古屋コピバンフェス 2012-2023';
-  document.getElementById('siteShareLine').href=`https://line.me/R/msg/text/?${encodeURIComponent(siteText+'\n'+SITE_URL)}`;
-  document.getElementById('siteShareX').href=`https://x.com/intent/tweet?text=${encodeURIComponent(siteText)}&url=${encodeURIComponent(SITE_URL)}`;
-  btn.addEventListener('click',e=>{e.stopPropagation();popup.classList.toggle('on');});
-  document.addEventListener('click',()=>popup.classList.remove('on'));
-})();
-
 // DEEP LINK
 (function(){
   const m=location.hash.match(/^#vol(\d+)/);
@@ -1411,10 +1381,15 @@ document.getElementById('admSaveBtn').addEventListener('click',()=>{
       // random先、★後半固定
       const fill=rest.slice(0,Math.max(0,COUNT-starred.length));
       let files=[...fill,...starred];
+      const _dpr=Math.min(window.devicePixelRatio||1,2);
+      const _port=window.innerHeight>window.innerWidth;
+      const _thumbParam=_port
+        ?`size=${Math.min(Math.ceil(window.innerWidth*_dpr),1080)}x${Math.min(Math.ceil(window.innerHeight*_dpr),1920)}&crop=1`
+        :'size=1920x1080';
       const imgs=files.map(f=>{
         const img=document.createElement('img');
         img.className='splash-img';
-        img.src=`https://api.pcloud.com/getpubthumb?code=${SPLASH_CODE}&fileid=${f.fileid}&size=1920x1920`;
+        img.src=`https://api.pcloud.com/getpubthumb?code=${SPLASH_CODE}&fileid=${f.fileid}&${_thumbParam}`;
         sp.insertBefore(img,bar);
         return img;
       });
