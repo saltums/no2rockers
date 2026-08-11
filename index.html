@@ -1099,13 +1099,22 @@ function findPcFolder(node,id){
   }
   return null;
 }
+function collectPcImgs(node){
+  const ext=/\.(jpg|jpeg|png)$/i;
+  const direct=(node.contents||[]).filter(f=>!f.isfolder&&ext.test(f.name));
+  if(direct.length)return direct;
+  // 直下に画像がなければサブフォルダも探す（再帰）
+  const sub=[];
+  for(const c of(node.contents||[])){if(c.isfolder)sub.push(...collectPcImgs(c));}
+  return sub;
+}
 async function loadPcloudPhotos(folderid,container){
   container.innerHTML='<div class="pcloud-loading">読み込み中…</div>';
   try{
     const tree=await getPcTree();
     const folder=findPcFolder(tree,parseInt(folderid));
     if(!folder){container.innerHTML='<div class="pcloud-loading">フォルダが見つかりません</div>';return;}
-    const imgs=(folder.contents||[]).filter(f=>!f.isfolder&&/\.(jpg|jpeg|png)$/i.test(f.name));
+    const imgs=collectPcImgs(folder);
     if(!imgs.length){container.innerHTML='<div class="pcloud-loading">写真なし</div>';return;}
     container.innerHTML=imgs.map(f=>`<img
       src="https://api.pcloud.com/getpubthumb?code=${PCLOUD_CODE}&fileid=${f.fileid}&size=160x160&crop=1"
