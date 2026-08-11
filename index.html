@@ -274,6 +274,24 @@ a{color:inherit}
 }
 .ev-cmt-btn:hover{border-color:var(--fg2);color:var(--fg)}
 
+/* CLOUD SYNC */
+.adm-sync-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--accent);
+  display:none;align-items:center;justify-content:center;
+  font-size:16px;color:var(--accent);transition:all .18s;
+}
+body[data-admin="1"] .adm-sync-btn{display:flex}
+.adm-sync-overlay{
+  position:fixed;inset:0;z-index:1600;background:rgba(0,0,0,.55);
+  display:none;align-items:center;justify-content:center;
+}
+.adm-sync-overlay.on{display:flex}
+.adm-sync-box{
+  background:var(--bg);border:1px solid var(--rule);border-radius:16px;
+  padding:24px;width:min(380px,90vw);display:flex;flex-direction:column;gap:12px;
+}
+.adm-sync-status{font-size:12px;color:var(--fg3);text-align:center;min-height:18px}
+
 /* OVERLAY */
 .overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.38);
@@ -532,6 +550,7 @@ body[data-admin] .act-edit-btn{display:inline-flex}
       <a href="https://www.youtube.com/@%E6%B0%B8%E9%81%A0%E3%81%AE%E4%BA%8C%E7%95%AA%E6%89%8B%E3%83%AD%E3%83%83%E3%82%AF%E3%83%95%E3%82%A7%E3%82%B9" class="hd-yt-btn" target="_blank" rel="noopener" title="YouTube チャンネル">▶</a>
       <a href="https://x.com/no2rockers" class="hd-x-btn" target="_blank" rel="noopener" title="@no2rockers on X">𝕏</a>
       <button class="theme-btn" id="themeBtn" title="テーマ切替">◐</button>
+      <button class="adm-sync-btn" id="admSyncBtn" title="クラウド同期">☁</button>
       <button class="adm-btn" id="admBtn" title="Admin">⚙</button>
     </div>
     <p class="hd-eyebrow">Nagoya · Copyband Festival · 2012–2023</p>
@@ -568,6 +587,19 @@ body[data-admin] .act-edit-btn{display:inline-flex}
       <button class="vid-modal-close" id="vidModalClose">×</button>
     </div>
     <div id="vidModalBody"></div>
+  </div>
+</div>
+
+<div class="adm-sync-overlay" id="admSyncOverlay">
+  <div class="adm-sync-box">
+    <div style="font-size:15px;font-weight:700">☁ クラウド同期</div>
+    <p class="adm-lbl" style="margin:0">GitHub Personal Access Token<br><small style="font-weight:400;color:var(--fg3)">スコープ: public_repo（Fine-grained: Contents を Read &amp; write）</small></p>
+    <input type="password" class="adm-input" id="admGhToken" placeholder="ghp_...">
+    <div style="display:flex;gap:8px">
+      <button class="adm-cancel-btn" id="admSyncClose" style="flex:1">キャンセル</button>
+      <button class="adm-save" id="admSyncSave" style="flex:2">☁ 保存する</button>
+    </div>
+    <div class="adm-sync-status" id="admSyncStatus"></div>
   </div>
 </div>
 
@@ -1080,11 +1112,7 @@ function renderActRow(a,vol,idx){
   const editBtn=`<button class="act-edit-btn" data-key="${key}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
   const photoBtn=a.photos?`<button class="act-photos-btn" data-pfid="${a.photos}">📷</button>`:'';
   const photoDiv=a.photos?`<div class="pcloud-photos" data-pfid="${a.photos}"></div>`:'';
-  const actText=`${displayName}（${a.o}）@ 永遠の二番手ロックフェス Vol.${vol}`;
-  const actUrl=SITE_URL+'#vol'+vol;
-  const actLine=`<a class="sh-pill-line" href="https://line.me/R/msg/text/?${encodeURIComponent(actText+'\n'+actUrl)}" target="_blank" rel="noopener">LINE</a>`;
-  const actX=`<a class="sh-pill-x" href="https://x.com/intent/tweet?text=${encodeURIComponent(actText)}&url=${encodeURIComponent(actUrl)}" target="_blank" rel="noopener">𝕏</a>`;
-  return `<div class="act"><span class="act-copy">${displayName}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div><div class="act-share-row">${actLine}${actX}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
+  return `<div class="act"><span class="act-copy">${displayName}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
 }
 
 function openDrawer(ev,showCmts){
@@ -1245,6 +1273,19 @@ if(adminMode)document.body.dataset.admin='1';
 
 function saveStore(d){localStorage.setItem('nibanme_data',JSON.stringify(d));}
 
+// REMOTE DATA LOAD
+(function(){
+  const RAW='https://raw.githubusercontent.com/saltums/no2rockers/master/data/admin-data.json';
+  fetch(RAW+'?t='+Date.now())
+    .then(r=>r.ok?r.json():null)
+    .then(remote=>{
+      if(remote&&Object.keys(remote).length){
+        saveStore(Object.assign(getStore(),remote));
+      }
+    })
+    .catch(()=>{});
+})();
+
 const admBtn=document.getElementById('admBtn');
 const admLoginOverlay=document.getElementById('admLoginOverlay');
 const admEditOverlay=document.getElementById('admEditOverlay');
@@ -1345,6 +1386,50 @@ document.getElementById('admSaveBtn').addEventListener('click',()=>{
   admEditOverlay.classList.remove('on');
   if(currentEv)openDrawer(currentEv,false);
 });
+
+// CLOUD SYNC
+(function(){
+  const overlay=document.getElementById('admSyncOverlay');
+  const tokenInp=document.getElementById('admGhToken');
+  const status=document.getElementById('admSyncStatus');
+  const saveBtn=document.getElementById('admSyncSave');
+  const TOKEN_KEY='__gh_token__';
+  const API='https://api.github.com/repos/saltums/no2rockers/contents/data/admin-data.json';
+
+  document.getElementById('admSyncBtn').addEventListener('click',()=>{
+    tokenInp.value=localStorage.getItem(TOKEN_KEY)||'';
+    status.textContent='';
+    overlay.classList.add('on');
+  });
+  document.getElementById('admSyncClose').addEventListener('click',()=>overlay.classList.remove('on'));
+
+  saveBtn.addEventListener('click',async()=>{
+    const token=tokenInp.value.trim();
+    if(!token){status.textContent='Token を入力してください';return;}
+    localStorage.setItem(TOKEN_KEY,token);
+    saveBtn.disabled=true;
+    status.textContent='アップロード中...';
+    try{
+      const hdrs={'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'};
+      const getRes=await fetch(API,{headers:hdrs});
+      if(!getRes.ok)throw new Error(`取得失敗 (${getRes.status})`);
+      const {sha}=await getRes.json();
+      const content=btoa(unescape(encodeURIComponent(JSON.stringify(getStore(),null,2))));
+      const putRes=await fetch(API,{
+        method:'PUT',
+        headers:{...hdrs,'Content-Type':'application/json'},
+        body:JSON.stringify({message:'Update admin data via site',content,sha})
+      });
+      if(!putRes.ok)throw new Error(`保存失敗 (${putRes.status})`);
+      status.textContent='✓ 同期完了';
+      setTimeout(()=>overlay.classList.remove('on'),1500);
+    }catch(e){
+      status.textContent='エラー: '+e.message;
+    }finally{
+      saveBtn.disabled=false;
+    }
+  });
+})();
 
 // DEEP LINK
 (function(){
