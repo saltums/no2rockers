@@ -387,6 +387,11 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 }
 .act-photos-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
 .act-photo{width:82px;height:82px;object-fit:cover;border-radius:8px;cursor:pointer}
+.act-photos-btn{font-size:13px;padding:2px 7px;border:1px solid var(--rule);border-radius:20px;transition:.15s;color:var(--fg2);line-height:1.4;margin-left:4px}
+.act-photos-btn:hover{border-color:var(--fg2);color:var(--fg)}
+.pcloud-photos{display:none;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.pcloud-loading{color:var(--fg3);font-size:12px;padding:4px 0;flex:0 0 100%}
+.pcloud-photo{width:80px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer}
 .act-video-wrap{border-radius:10px;overflow:hidden;aspect-ratio:16/9;margin-bottom:9px}
 .act-video-wrap iframe{width:100%;height:100%;border:0;display:block}
 /* VIDEO MODAL */
@@ -617,7 +622,7 @@ const EVS=[
    dayDates:['2018.03.03','2018.03.10'],
    days:[
      {label:'DAY 1 — 3月3日（土）',acts:[
-       {c:'紅アフロ',o:'藍坊主',vids:['https://www.youtube.com/watch?v=LGk0p4qbnMc']},
+       {c:'紅アフロ',o:'藍坊主',vids:['https://www.youtube.com/watch?v=LGk0p4qbnMc'],photos:32797509831},
        {c:'あいこ',o:'aiko',vids:['https://www.youtube.com/watch?v=PJt7KgEA_Mc']},
        {c:'レッツゴー3匹!!!',o:'ザ・50回転ズ',vids:['https://www.youtube.com/watch?v=QozzNVQ1T4Y']},
        {c:'THEE MACHINE GUN ETIQUETTE',o:'THEE MICHELLE GUN ELEPHANT',vids:['https://www.youtube.com/watch?v=4E62SKT5RtM']},
@@ -626,11 +631,11 @@ const EVS=[
        {c:'SUPER RICH 社員',o:'SUPER BEAVER'},
      ]},
      {label:'DAY 2 — 3月10日（土）',acts:[
-       {c:'Thee Orange Sauce',o:'JUDY AND MARY',vids:['https://www.youtube.com/watch?v=v89uG_C3Amc']},
-       {c:'檸檬をかじる彼女',o:'Base Ball Bear',vids:['https://www.youtube.com/watch?v=C1nTBcgw_8s']},
+       {c:'Thee Orange Sauce',o:'JUDY AND MARY',vids:['https://www.youtube.com/watch?v=v89uG_C3Amc'],photos:32797509858},
+       {c:'檸檬をかじる彼女',o:'Base Ball Bear',vids:['https://www.youtube.com/watch?v=C1nTBcgw_8s'],photos:32797509897},
        {c:'OCHAMO',o:'SHISHAMO',vids:['https://www.youtube.com/watch?v=VAX6d0BHeIc']},
-       {c:'皇帝ペンギン2号',o:'PENGUIN RESEARCH',vids:['https://www.youtube.com/watch?v=nLhYShCAJ4c']},
-       {c:'「LIVE-GYMへようこそ」',o:"B'z",vids:['https://www.youtube.com/watch?v=HjvOnOTm-FY']},
+       {c:'皇帝ペンギン2号',o:'PENGUIN RESEARCH',vids:['https://www.youtube.com/watch?v=nLhYShCAJ4c'],photos:32797509893},
+       {c:'「LIVE-GYMへようこそ」',o:"B'z",vids:['https://www.youtube.com/watch?v=HjvOnOTm-FY'],photos:32797509891},
        {c:'@ flood of circle',o:'a flood of circle',vids:['https://www.youtube.com/watch?v=h4cZDK8PsNc']},
        {c:'ニジイロクワガタ',o:'FLOW'},
      ]},
@@ -695,12 +700,12 @@ const EVS=[
   {vol:9,ds:'2016.03.05',dd:'2016年3月5日（土）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol9',
    acts:[
      {c:'樹里麻里',o:'JUDY AND MARY'},
-     {c:'尾崎倦怠感',o:'クリープハイプ',vids:['https://www.youtube.com/watch?v=soa2L0RVVmY']},
+     {c:'尾崎倦怠感',o:'クリープハイプ',vids:['https://www.youtube.com/watch?v=soa2L0RVVmY'],photos:32797509763},
      {c:'lemonty',o:'plenty',vids:['https://www.youtube.com/watch?v=Nd7lVYEwTCs']},
-     {c:'クモ少年',o:'スピッツ',vids:['https://www.youtube.com/watch?v=OvAS7aC34vM']},
-     {c:'ノーザン35',o:'Northern19',vids:['https://www.youtube.com/watch?v=K-v9ZNdEo2M']},
-     {c:'SEKAI NO OWARI',o:'THEE MICHELLE GUN ELEPHANT',vids:['https://www.youtube.com/watch?v=oEnn7MY09JE']},
-     {c:'檸檬を噛る彼女',o:'Base Ball Bear',vids:['https://www.youtube.com/watch?v=rafmidq-Pwg','https://www.youtube.com/watch?v=iOZpVT-8lwE']},
+     {c:'クモ少年',o:'スピッツ',vids:['https://www.youtube.com/watch?v=OvAS7aC34vM'],photos:32797509765},
+     {c:'ノーザン35',o:'Northern19',vids:['https://www.youtube.com/watch?v=K-v9ZNdEo2M'],photos:32797509764},
+     {c:'SEKAI NO OWARI',o:'THEE MICHELLE GUN ELEPHANT',vids:['https://www.youtube.com/watch?v=oEnn7MY09JE'],photos:32797509766},
+     {c:'檸檬を噛る彼女',o:'Base Ball Bear',vids:['https://www.youtube.com/watch?v=rafmidq-Pwg','https://www.youtube.com/watch?v=iOZpVT-8lwE'],photos:32797509791},
    ],
    cmts:[
      {h:'@no2rockers',d:'2016.03.06',t:'永遠の二番手ロックフェスvol.9 集合写真',url:'https://x.com/no2rockers/status/706468634525216770'},
@@ -709,7 +714,7 @@ const EVS=[
   },
   {vol:8,ds:'2015.10.11',dd:'2015年10月11日（日）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol8',
    acts:[
-     {c:'kiri クリームチーズ',o:'チャットモンチー',vids:['https://www.youtube.com/watch?v=OSuJK9plj-k']},
+     {c:'kiri クリームチーズ',o:'チャットモンチー',vids:['https://www.youtube.com/watch?v=OSuJK9plj-k'],photos:32797510312},
      {c:'The Bocks',o:'斎藤和義',vids:['https://www.youtube.com/watch?v=ZEcvuv5sReM']},
      {c:'サワダファミリア',o:'フジファブリック',vids:['https://www.youtube.com/watch?v=c-ufagyhaPw']},
      {c:'名古屋事変',o:'東京事変',vids:['https://www.youtube.com/watch?v=C0b8pb2v0ec']},
@@ -738,11 +743,11 @@ const EVS=[
        {c:'1000-FEET',o:'10-FEET',vids:['https://www.youtube.com/watch?v=sqi5sQvn8Ro']},
      ]},
      {label:'DAY 2 — 3月14日（土）',acts:[
-       {c:'冷凍みかん',o:'クリープハイプ'},
-       {c:"To'day",o:'阿部真央',vids:['https://www.youtube.com/watch?v=8zXF5dO0nN8','https://www.youtube.com/watch?v=sdRwCjoE0T0']},
-       {c:'180C',o:'RADWIMPS'},
-       {c:'THE ORAL KUSHIGARETTES',o:'THE ORAL CIGARETTES'},
-       {c:'押さない走らないドラゲナイ',o:'SEKAI NO OWARI',vids:['https://www.youtube.com/watch?v=ysDT3yqVL1s','https://www.youtube.com/watch?v=ZLD49LN99nI']},
+       {c:'冷凍みかん',o:'クリープハイプ',photos:32797510270},
+       {c:"To'day",o:'阿部真央',vids:['https://www.youtube.com/watch?v=8zXF5dO0nN8','https://www.youtube.com/watch?v=sdRwCjoE0T0'],photos:32797510268},
+       {c:'180C',o:'RADWIMPS',photos:32797510309},
+       {c:'THE ORAL KUSHIGARETTES',o:'THE ORAL CIGARETTES',photos:32797510311},
+       {c:'押さない走らないドラゲナイ',o:'SEKAI NO OWARI',vids:['https://www.youtube.com/watch?v=ysDT3yqVL1s','https://www.youtube.com/watch?v=ZLD49LN99nI'],photos:32797510315},
        {c:'S2',o:'THE BACK HORN',vids:['https://www.youtube.com/watch?v=j9bnt2rgsBg','https://www.youtube.com/watch?v=jKfaAdsd-J8']},
        {c:'@flood of circle',o:'a flood of circle',vids:['https://www.youtube.com/watch?v=QAT9jEGpPg0','https://www.youtube.com/watch?v=sILBCXoVSbE','https://www.youtube.com/watch?v=p_1Km2Ye6CI','https://www.youtube.com/watch?v=q-FrYInaBuY']},
      ]},
@@ -777,9 +782,9 @@ const EVS=[
    note:'一部のみ記録あり',
    acts:[
      {c:'ほっともっと',o:'—',vids:['https://www.youtube.com/watch?v=v3-PK-cB5BI']},
-     {c:'一fゆらぎ',o:'a flood of circle',vids:['https://www.youtube.com/watch?v=z9fsnS7S7t4']},
-     {c:'乙女oftheゲス',o:'ゲスの極み乙女。',vids:['https://www.youtube.com/watch?v=a_7H7IX1Urg']},
-     {c:'puffi',o:'PUFFY',vids:['https://www.youtube.com/watch?v=DWgOpr8zQ4g']},
+     {c:'一fゆらぎ',o:'a flood of circle',vids:['https://www.youtube.com/watch?v=z9fsnS7S7t4'],photos:32797510239},
+     {c:'乙女oftheゲス',o:'ゲスの極み乙女。',vids:['https://www.youtube.com/watch?v=a_7H7IX1Urg'],photos:32797510242},
+     {c:'puffi',o:'PUFFY',vids:['https://www.youtube.com/watch?v=DWgOpr8zQ4g'],photos:32797510241},
    ],
   },
   {vol:3,ds:'2013年頃',unknown:true},
@@ -859,6 +864,42 @@ searchInp.addEventListener('input',()=>{
   searchCount.textContent=shown?`${shown}件のイベントが見つかりました`:'一致するイベントはありません';
 });
 
+// PCLOUD PHOTOS
+const PCLOUD_CODE='kZLRP7JZe4OHRHQKM6hCVF5PVfkDO0yrJqy7';
+let _pcTree=null;
+async function getPcTree(){
+  if(_pcTree)return _pcTree;
+  const r=await fetch(`https://api.pcloud.com/showpublink?code=${PCLOUD_CODE}`);
+  const j=await r.json();
+  _pcTree=j.metadata;
+  return _pcTree;
+}
+function findPcFolder(node,id){
+  if(!node)return null;
+  if(node.folderid===id)return node;
+  for(const c of(node.contents||[])){
+    if(c.isfolder){const f=findPcFolder(c,id);if(f)return f;}
+  }
+  return null;
+}
+async function loadPcloudPhotos(folderid,container){
+  container.innerHTML='<div class="pcloud-loading">読み込み中…</div>';
+  try{
+    const tree=await getPcTree();
+    const folder=findPcFolder(tree,parseInt(folderid));
+    if(!folder){container.innerHTML='<div class="pcloud-loading">フォルダが見つかりません</div>';return;}
+    const imgs=(folder.contents||[]).filter(f=>!f.isfolder&&/\.(jpg|jpeg|png)$/i.test(f.name));
+    if(!imgs.length){container.innerHTML='<div class="pcloud-loading">写真なし</div>';return;}
+    container.innerHTML=imgs.map(f=>`<img
+      src="https://api.pcloud.com/getpubthumb?code=${PCLOUD_CODE}&fileid=${f.fileid}&size=160x160&crop=1"
+      class="pcloud-photo" data-fid="${f.fileid}" alt="" loading="lazy">`).join('');
+    container.querySelectorAll('.pcloud-photo').forEach(img=>{
+      img.addEventListener('click',()=>window.open(
+        `https://api.pcloud.com/getpubthumb?code=${PCLOUD_CODE}&fileid=${img.dataset.fid}&size=1200x900`,'_blank'));
+    });
+  }catch(e){container.innerHTML='<div class="pcloud-loading">読み込み失敗</div>';}
+}
+
 // DRAWER
 const overlay=document.getElementById('overlay');
 const drawer=document.getElementById('drawer');
@@ -892,7 +933,9 @@ function renderActRow(a,vol,idx){
   const vids=actVids(a,vol,idx);
   const vidBtn=vids.length?`<button class="act-vid-btn" data-key="${actKey(vol,idx)}">▶ ${vids.length}本</button>`:'';
   const editBtn=`<button class="act-edit-btn" data-key="${actKey(vol,idx)}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
-  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${vidBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}`;
+  const photoBtn=a.photos?`<button class="act-photos-btn" data-pfid="${a.photos}">📷</button>`:'';
+  const photoDiv=a.photos?`<div class="pcloud-photos" data-pfid="${a.photos}"></div>`:'';
+  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
 }
 
 function openDrawer(ev,showCmts){
@@ -964,6 +1007,22 @@ function openDrawer(ev,showCmts){
     btn.addEventListener('click',e=>{
       e.stopPropagation();
       openEditModal(btn.dataset.key,btn.dataset.name);
+    });
+  });
+
+  drContent.querySelectorAll('.act-photos-btn').forEach(btn=>{
+    btn.addEventListener('click',async e=>{
+      e.stopPropagation();
+      const fid=btn.dataset.pfid;
+      const container=drContent.querySelector(`.pcloud-photos[data-pfid="${fid}"]`);
+      if(!container)return;
+      if(container.dataset.loaded==='1'){
+        container.style.display=container.style.display==='none'?'flex':'none';
+        return;
+      }
+      container.style.display='flex';
+      container.dataset.loaded='1';
+      await loadPcloudPhotos(fid,container);
     });
   });
 
