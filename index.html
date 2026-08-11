@@ -1322,8 +1322,9 @@ document.getElementById('admSaveBtn').addEventListener('click',()=>{
       const rest=all.filter(f=>!f.name.includes('★'));
       // shuffle rest
       for(let i=rest.length-1;i>0;i--){const r=Math.floor(Math.random()*(i+1));[rest[i],rest[r]]=[rest[r],rest[i]];}
-      // ★必須 + random埋め、計COUNTまで
-      let files=[...starred,...rest].slice(0,Math.max(COUNT,starred.length));
+      // random先、★後半固定
+      const fill=rest.slice(0,Math.max(0,COUNT-starred.length));
+      let files=[...fill,...starred];
       const imgs=files.map(f=>{
         const img=document.createElement('img');
         img.className='splash-img';
