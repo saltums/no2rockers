@@ -76,12 +76,13 @@ a{color:inherit}
   border:1px solid var(--rule);border-radius:20px
 }
 .hd-toolbar{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-bottom:22px}
-.hd-x-btn{
+.hd-x-btn,.hd-yt-btn{
   width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
   display:flex;align-items:center;justify-content:center;
   font-size:13px;font-weight:900;color:var(--fg3);text-decoration:none;transition:all .18s;
 }
-.hd-x-btn:hover{border-color:var(--fg3);color:var(--fg)}
+.hd-x-btn:hover,.hd-yt-btn:hover{border-color:var(--fg3);color:var(--fg)}
+.hd-yt-btn{font-size:16px}
 .theme-btn{
   width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
   display:flex;align-items:center;justify-content:center;
@@ -426,6 +427,7 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 <header class="hd">
   <div class="hd-inner">
     <div class="hd-toolbar">
+      <a href="https://www.youtube.com/@%E6%B0%B8%E9%81%A0%E3%81%AE%E4%BA%8C%E7%95%AA%E6%89%8B%E3%83%AD%E3%83%83%E3%82%AF%E3%83%95%E3%82%A7%E3%82%B9" class="hd-yt-btn" target="_blank" rel="noopener" title="YouTube チャンネル">▶</a>
       <a href="https://x.com/no2rockers" class="hd-x-btn" target="_blank" rel="noopener" title="@no2rockers on X">𝕏</a>
       <button class="theme-btn" id="themeBtn" title="テーマ切替">◐</button>
       <button class="adm-btn" id="admBtn" title="Admin">⚙</button>
@@ -487,6 +489,10 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 <div class="adm-overlay" id="admEditOverlay">
   <div class="adm-card">
     <p class="adm-h" id="admEditTitle">投稿</p>
+    <div class="adm-sec">
+      <label class="adm-lbl">バンド名修正</label>
+      <input type="text" class="adm-input" id="admNameInput" placeholder="修正後のバンド名（空欄=変更なし）">
+    </div>
     <div class="adm-sec">
       <label class="adm-lbl">セットリスト（1行1曲）</label>
       <textarea class="adm-ta" id="admSetlist" placeholder="M1. 曲タイトル&#10;M2. 曲タイトル&#10;M3. 曲タイトル"></textarea>
@@ -930,12 +936,15 @@ function renderActMedia(a,vol,idx){
   return h==='<div class="act-data"></div>'?'':h;
 }
 function renderActRow(a,vol,idx){
+  const key=actKey(vol,idx);
+  const stored=getStore()[key]||{};
+  const displayName=stored.name||a.c;
   const vids=actVids(a,vol,idx);
-  const vidBtn=vids.length?`<button class="act-vid-btn" data-key="${actKey(vol,idx)}">▶ ${vids.length}本</button>`:'';
-  const editBtn=`<button class="act-edit-btn" data-key="${actKey(vol,idx)}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
+  const vidBtn=vids.length?`<button class="act-vid-btn" data-key="${key}">▶ ${vids.length}本</button>`:'';
+  const editBtn=`<button class="act-edit-btn" data-key="${key}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
   const photoBtn=a.photos?`<button class="act-photos-btn" data-pfid="${a.photos}">📷</button>`:'';
   const photoDiv=a.photos?`<div class="pcloud-photos" data-pfid="${a.photos}"></div>`:'';
-  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
+  return `<div class="act"><span class="act-copy">${displayName}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
 }
 
 function openDrawer(ev,showCmts){
@@ -1172,8 +1181,9 @@ function renderAdmPhotos(){
 function openEditModal(key,name){
   editKey=key;
   const stored=(getStore()[key])||{setlist:[],videos:[],photos:[]};
-  editData={setlist:[...(stored.setlist||[])],videos:[...(stored.videos||[])],photos:[...(stored.photos||[])]};
+  editData={setlist:[...(stored.setlist||[])],videos:[...(stored.videos||[])],photos:[...(stored.photos||[])],name:stored.name||''};
   document.getElementById('admEditTitle').textContent=name+' — 投稿';
+  document.getElementById('admNameInput').value=editData.name;
   document.getElementById('admSetlist').value=editData.setlist.join('\n');
   renderAdmVideos();
   renderAdmPhotos();
@@ -1185,6 +1195,8 @@ admEditOverlay.addEventListener('click',e=>{if(e.target===admEditOverlay)admEdit
 document.getElementById('admSaveBtn').addEventListener('click',()=>{
   editData.videos=[...document.querySelectorAll('.adm-vid-inp')].map(i=>i.value.trim()).filter(Boolean);
   editData.setlist=document.getElementById('admSetlist').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const nameVal=document.getElementById('admNameInput').value.trim();
+  if(nameVal)editData.name=nameVal;else delete editData.name;
   const s=getStore();s[editKey]=editData;saveStore(s);
   admEditOverlay.classList.remove('on');
   if(currentEv)openDrawer(currentEv,false);
