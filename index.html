@@ -144,6 +144,10 @@ a{color:inherit}
   line-height:1.85;margin-top:2px
 }
 .ev-acts em{font-style:normal;color:var(--fg);font-weight:500}
+.ev-act-sep{color:var(--fg3);font-weight:300;padding:0 2px}
+.ev-date-multi{display:flex;flex-direction:column;gap:3px}
+.ev-day-pair{display:flex;align-items:baseline;gap:8px;font-size:clamp(14px,3vw,19px);font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.ev-day-num{font-size:10px;letter-spacing:.1em;color:var(--fg3);font-weight:400;min-width:40px;flex-shrink:0}
 .ev-foot{
   display:flex;align-items:center;justify-content:space-between;
   margin-top:9px
@@ -461,12 +465,13 @@ const EVS=[
   },
   {vol:17,ds:'2020.03.01',dd:'2020年3月1日（日）',venue:'今池GROW',ticket:'¥500',open:'16:00 / 16:30',
    acts:[
-     {c:'メロン記念日',o:'レミオロメン'},
+     {c:'メロン記念日',o:'レミオロメン',vids:['https://www.youtube.com/watch?v=XiV0PzApZVw','https://www.youtube.com/watch?v=9D2X0TidMss','https://www.youtube.com/watch?v=wjZVEJMyRO4','https://www.youtube.com/watch?v=S-rP_yqAJ_Y','https://www.youtube.com/watch?v=7uCZz6DUQBs']},
      {c:'yonaki',o:'yonige'},
      {c:'ななみなみ',o:'美波'},
      {c:'スーパービールロックバンド',o:'ソウルフード'},
      {c:'Mr.FULLSWING',o:'Mr.Children'},
      {c:'メンブレッターズ',o:'ハンブレッターズ'},
+     {c:'@ flood of circle',o:'THE BACK HORN',vids:['https://www.youtube.com/watch?v=sYHcOhRqaZ4','https://www.youtube.com/watch?v=QvqVhbTWU_E','https://www.youtube.com/watch?v=aWa22eT3yUY','https://www.youtube.com/watch?v=fR-HRZqxX2I','https://www.youtube.com/watch?v=HGfEQ7ShWho']},
    ],
    cmts:[
      {h:'@no2rockers',d:'2020.03.02',t:'永遠の二番手ロックフェスvol.17参加してくださった皆様本当にありがとうございました！みんなが笑顔で音楽を楽しめた最高の一日にできたと思います。ライブハウスが好きなみんなが、元気で、また集まれるように、居場所残して待っています。また遊びましょう！',url:'https://x.com/no2rockers/status/1234290860117749760'},
@@ -496,7 +501,7 @@ const EVS=[
    days:[
      {label:'DAY 1 — 1月12日（土）',acts:[
        {c:'そーたいせーりろん',o:'相対性理論'},
-       {c:'Grapevananappleichigopeeman',o:'GRAPEVINE'},
+       {c:'Grapevananappleichigopeeman',o:'GRAPEVINE',vids:['https://www.youtube.com/watch?v=xAKI2sIX6oo','https://www.youtube.com/watch?v=ypuydnoLvFI','https://www.youtube.com/watch?v=2TzhHjiMCFA','https://www.youtube.com/watch?v=oQhA5DV5OoE','https://www.youtube.com/watch?v=MJbQDEjYlKA']},
        {c:'andyとrock',o:'andymori'},
        {c:'いちご誕生日',o:'Stan'},
        {c:'東山公園',o:'赤い公園'},
@@ -504,12 +509,12 @@ const EVS=[
        {c:'SUPER RICH 社員',o:'SUPER BEAVER'},
      ]},
      {label:'DAY 2 — 1月13日（日）',acts:[
-       {c:'ふっかつの「F」',o:'sumika'},
+       {c:'ふっかつの「F」',o:'sumika',vids:['https://www.youtube.com/watch?v=EJRn1LSj_cE','https://www.youtube.com/watch?v=Y9zn7gqC91E','https://www.youtube.com/watch?v=PXrqUdh8s7c','https://www.youtube.com/watch?v=tfxjTRL3-rU','https://www.youtube.com/watch?v=E1vDPXYjd6o']},
        {c:'インドでらインド',o:'indigo la End'},
        {c:'The SALADAVERS',o:'The SALOVERS'},
        {c:'檸檬をかじる彼女',o:'Base Ball Bear'},
        {c:'安全地帯',o:'東京事変'},
-       {c:'1000-FEET',o:'10-FEET'},
+       {c:'1000-FEET',o:'10-FEET',vids:['https://www.youtube.com/watch?v=46xCmFz97kU','https://www.youtube.com/watch?v=wrMr92Z4J8Y','https://www.youtube.com/watch?v=iDElu0YNG6Y','https://www.youtube.com/watch?v=s8tLmhymCdE','https://www.youtube.com/watch?v=j1eEfwaeHR8','https://www.youtube.com/watch?v=KTBW-6Xt4II']},
        {c:'@ flood of circle',o:'a flood of circle'},
      ]},
    ],
@@ -537,6 +542,7 @@ const EVS=[
    sq:'https://x.com/search?q=from%3Ano2rockers+since%3A2018-09-01+until%3A2018-11-30&f=live',
   },
   {vol:13,ds:'2018.03.03+10',dd:'2018年3月3日（土）・10日（土）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol13',
+   dayDates:['2018.03.03','2018.03.10'],
    days:[
      {label:'DAY 1 — 3月3日（土）',acts:[
        {c:'紅アフロ',o:'藍坊主'},
@@ -647,6 +653,7 @@ const EVS=[
    sq:'https://x.com/search?q=from%3Ano2rockers+since%3A2015-09-01+until%3A2015-11-30&f=live',
   },
   {vol:7,ds:'2015.03.07+14',dd:'2015年3月7日（土）・14日（土）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol7',
+   dayDates:['2015.03.07','2015.03.14'],
    days:[
      {label:'DAY 1 — 3月7日（土）',acts:[
        {c:'Patricia',o:'the pillows'},
@@ -659,12 +666,12 @@ const EVS=[
      ]},
      {label:'DAY 2 — 3月14日（土）',acts:[
        {c:'冷凍みかん',o:'クリープハイプ'},
-       {c:"To'day",o:'阿部真央'},
+       {c:"To'day",o:'阿部真央',vids:['https://www.youtube.com/watch?v=8zXF5dO0nN8']},
        {c:'180C',o:'RADWIMPS'},
        {c:'THE ORAL KUSHIGARETTES',o:'THE ORAL CIGARETTES'},
        {c:'押さない走らないドラゲナイ',o:'SEKAI NO OWARI'},
-       {c:'S2',o:'THE BACK HORN'},
-       {c:'@flood of circle',o:'a flood of circle'},
+       {c:'S2',o:'THE BACK HORN',vids:['https://www.youtube.com/watch?v=j9bnt2rgsBg']},
+       {c:'@flood of circle',o:'a flood of circle',vids:['https://www.youtube.com/watch?v=QAT9jEGpPg0','https://www.youtube.com/watch?v=sILBCXoVSbE']},
      ]},
    ],
    cmts:[
@@ -719,13 +726,13 @@ EVS.forEach(ev=>{
   }
 
   const allActs=ev.acts||(ev.days?ev.days.flatMap(d=>d.acts):[]);
-  const preview=allActs.map(a=>`<em>${a.c}</em>`).join('　');
+  const preview=allActs.map(a=>`<em>${a.c}</em>`).join('<span class="ev-act-sep">/</span>');
 
   el.innerHTML=`
     <div class="ev-ghost">${String(ev.vol).padStart(2,'0')}</div>
     <div class="ev-row1">
       <span class="ev-vol-lbl">Vol.${ev.vol}</span>
-      <span class="ev-date">${ev.ds}</span>
+      ${ev.dayDates?`<span class="ev-date-multi">${ev.dayDates.map((d,i)=>`<span class="ev-day-pair"><span class="ev-day-num">DAY${i+1}</span>${d}</span>`).join('')}</span>`:`<span class="ev-date">${ev.ds}</span>`}
     </div>
     <div class="ev-venue">${ev.venue}${ev.note?` — <span style="color:var(--accent);font-size:11px">${ev.note}</span>`:''}</div>
     <div class="ev-acts">${preview}</div>
@@ -757,22 +764,23 @@ function ytEmbed(url){
   const m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]+)/);
   return m?'https://www.youtube.com/embed/'+m[1]:null;
 }
-function renderActMedia(vol,idx){
+function renderActMedia(a,vol,idx){
+  const hardVids=(a&&a.vids)||[];
   const d=(getStore()[actKey(vol,idx)])||null;
-  if(!d)return'';
+  if(!d&&!hardVids.length)return'';
   let h='<div class="act-data">';
-  if(d.setlist&&d.setlist.length)
+  if(d&&d.setlist&&d.setlist.length)
     h+=`<div class="act-setlist-box"><div class="act-setlist-lbl">Setlist</div><ol class="act-setlist-ol">${d.setlist.map(s=>`<li>${s}</li>`).join('')}</ol></div>`;
-  if(d.photos&&d.photos.length)
+  if(d&&d.photos&&d.photos.length)
     h+=`<div class="act-photos-row">${d.photos.map(p=>`<img src="${p}" class="act-photo" alt="">`).join('')}</div>`;
-  if(d.videos&&d.videos.length)
-    d.videos.forEach(v=>{const e=ytEmbed(v);if(e)h+=`<div class="act-video-wrap"><iframe src="${e}" allowfullscreen loading="lazy"></iframe></div>`;});
+  const vids=[...hardVids,...((d&&d.videos)||[])];
+  vids.forEach(v=>{const e=ytEmbed(v);if(e)h+=`<div class="act-video-wrap"><iframe src="${e}" allowfullscreen loading="lazy"></iframe></div>`;});
   h+='</div>';
   return h==='<div class="act-data"></div>'?'':h;
 }
 function renderActRow(a,vol,idx){
   const editBtn=`<button class="act-edit-btn" data-key="${actKey(vol,idx)}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
-  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${editBtn}</div>${renderActMedia(vol,idx)}`;
+  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${editBtn}</div>${renderActMedia(a,vol,idx)}`;
 }
 
 function openDrawer(ev,showCmts){
