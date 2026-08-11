@@ -174,26 +174,57 @@ a{color:inherit}
 .ev-acts em{font-style:normal;color:var(--fg);font-weight:500}
 .ev-act-sep{color:var(--fg3);font-weight:300;padding:0 2px}
 
-/* SEARCH */
-.search-wrap{max-width:720px;margin:0 auto;padding:10px 28px 6px;position:relative}
-.search-inp{
-  width:100%;padding:9px 16px 9px 38px;
-  border:1px solid var(--rule);border-radius:24px;
-  background:var(--bg2);color:var(--fg);
-  font:inherit;font-size:13px;
-  outline:none;transition:border-color .18s;
-  -webkit-appearance:none;appearance:none;
+/* BAND SEARCH */
+.hd-search-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:var(--fg3);transition:all .18s;
 }
-.search-inp:focus{border-color:var(--fg3)}
-.search-inp::placeholder{color:var(--fg3)}
-.search-icon{
-  position:absolute;left:42px;top:50%;transform:translateY(-50%);
-  color:var(--fg3);font-size:15px;pointer-events:none;line-height:1
+.hd-search-btn:hover{border-color:var(--fg3);color:var(--fg)}
+.hd-search-btn.active{border-color:var(--accent);color:var(--accent)}
+#bandSearchOverlay{
+  position:fixed;inset:0;z-index:800;background:var(--bg);
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transition:opacity .2s;
 }
-.search-count{
-  font-size:11px;color:var(--fg3);text-align:right;
-  padding:0 2px 6px;min-height:20px;letter-spacing:.05em
+#bandSearchOverlay.on{opacity:1;pointer-events:auto}
+.bs-header{
+  padding:14px 16px;border-bottom:1px solid var(--rule);
+  display:flex;gap:10px;align-items:center;flex-shrink:0;
 }
+.bs-inp{
+  flex:1;padding:8px 14px;border:1px solid var(--rule);border-radius:20px;
+  background:var(--bg2);color:var(--fg);font-size:14px;font-family:inherit;
+  outline:none;-webkit-appearance:none;appearance:none;transition:border-color .15s;
+}
+.bs-inp:focus{border-color:var(--fg3)}
+.bs-inp::placeholder{color:var(--fg3)}
+.bs-close{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--fg3);flex-shrink:0;transition:.15s;
+}
+.bs-close:hover{border-color:var(--fg3);color:var(--fg)}
+.bs-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.bs-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 20px;border-bottom:1px solid var(--rule);cursor:pointer;
+  transition:background .1s;
+}
+.bs-item:active{background:var(--bg2)}
+.bs-item.selected{color:var(--accent)}
+.bs-item-name{font-size:14px;font-weight:500}
+.bs-item-count{font-size:11px;color:var(--fg3);flex-shrink:0;margin-left:8px}
+.bs-item.selected .bs-item-count{color:var(--accent)}
+.filter-chip{max-width:720px;margin:0 auto;padding:6px 28px 2px;display:none}
+.filter-chip.on{display:block}
+.filter-chip-inner{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--bg2);border:1px solid var(--accent);
+  border-radius:20px;padding:4px 12px;font-size:12px;color:var(--accent);
+}
+.filter-chip-x{cursor:pointer;opacity:.65;font-size:13px}
+.filter-chip-x:hover{opacity:1}
 .ev-date-multi{display:flex;flex-direction:column;gap:3px}
 .ev-day-pair{display:flex;align-items:baseline;gap:8px;font-size:clamp(14px,3vw,19px);font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 .ev-day-num{font-size:10px;letter-spacing:.1em;color:var(--fg3);font-weight:400;min-width:40px;flex-shrink:0}
@@ -445,6 +476,15 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 </head>
 <body>
 
+<!-- BAND SEARCH OVERLAY -->
+<div id="bandSearchOverlay">
+  <div class="bs-header">
+    <input type="search" id="bsInp" class="bs-inp" placeholder="絞り込む…" autocomplete="off">
+    <button class="bs-close" id="bsClose">✕</button>
+  </div>
+  <div class="bs-list" id="bsList"></div>
+</div>
+
 <!-- SPLASH -->
 <div id="splash">
   <div id="splash-bar"></div>
@@ -454,6 +494,7 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 <header class="hd">
   <div class="hd-inner">
     <div class="hd-toolbar">
+      <button class="hd-search-btn" id="searchBtn" title="出演バンドで絞り込む">🔍</button>
       <a href="https://www.youtube.com/@%E6%B0%B8%E9%81%A0%E3%81%AE%E4%BA%8C%E7%95%AA%E6%89%8B%E3%83%AD%E3%83%83%E3%82%AF%E3%83%95%E3%82%A7%E3%82%B9" class="hd-yt-btn" target="_blank" rel="noopener" title="YouTube チャンネル">▶</a>
       <a href="https://x.com/no2rockers" class="hd-x-btn" target="_blank" rel="noopener" title="@no2rockers on X">𝕏</a>
       <button class="theme-btn" id="themeBtn" title="テーマ切替">◐</button>
@@ -474,11 +515,7 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 
 <div class="sec-lbl">全記録 — Vol.18 → Vol.1</div>
 
-<div class="search-wrap">
-  <span class="search-icon">🔍</span>
-  <input type="search" id="searchInp" class="search-inp" placeholder="元バンド名・コピバン名で検索…" autocomplete="off">
-  <div class="search-count" id="searchCount"></div>
-</div>
+<div class="filter-chip" id="filterChip"></div>
 
 <main class="ev-list" id="evList"></main>
 
@@ -871,31 +908,64 @@ EVS.forEach(ev=>{
   listEl.appendChild(el);
 });
 
-// SEARCH
-const searchInp=document.getElementById('searchInp');
-const searchCount=document.getElementById('searchCount');
-const evEls=[...document.querySelectorAll('.ev')];
-searchInp.addEventListener('input',()=>{
-  const q=searchInp.value.trim().toLowerCase();
-  if(!q){
-    evEls.forEach(el=>el.style.display='');
-    searchCount.textContent='';
-    return;
-  }
-  let shown=0;
-  evEls.forEach(el=>{
-    const vol=parseInt(el.dataset.vol);
-    const ev=EVS.find(e=>e.vol===vol);
-    if(!ev){el.style.display='none';return;}
-    const allActs=ev.acts||(ev.days?ev.days.flatMap(d=>d.acts):[]);
-    const hit=allActs.some(a=>
-      (a.o&&a.o.toLowerCase().includes(q))||(a.c&&a.c.toLowerCase().includes(q))
-    );
-    el.style.display=hit?'':'none';
-    if(hit)shown++;
+// BAND SEARCH
+(function(){
+  const bandMap=new Map();
+  EVS.forEach(ev=>{
+    const add=acts=>(acts||[]).forEach(a=>{
+      if(!a.o||a.o==='—')return;
+      if(!bandMap.has(a.o))bandMap.set(a.o,[]);
+      if(!bandMap.get(a.o).includes(ev.vol))bandMap.get(a.o).push(ev.vol);
+    });
+    if(ev.acts)add(ev.acts);
+    if(ev.days)ev.days.forEach(d=>add(d.acts));
   });
-  searchCount.textContent=shown?`${shown}件のイベントが見つかりました`:'一致するイベントはありません';
-});
+  const bands=[...bandMap.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ja'));
+
+  let selected=null;
+  const overlay=document.getElementById('bandSearchOverlay');
+  const bsInp=document.getElementById('bsInp');
+  const bsList=document.getElementById('bsList');
+  const filterChip=document.getElementById('filterChip');
+  const searchBtn=document.getElementById('searchBtn');
+  const evEls=[...document.querySelectorAll('.ev')];
+
+  function renderList(q=''){
+    const items=q?bands.filter(([n])=>n.toLowerCase().includes(q.toLowerCase())):bands;
+    bsList.innerHTML=items.map(([name,vols])=>
+      `<div class="bs-item${selected===name?' selected':''}" data-name="${name.replace(/"/g,'&quot;')}">
+        <span class="bs-item-name">${name}</span>
+        <span class="bs-item-count">${vols.length}回</span>
+      </div>`).join('');
+    bsList.querySelectorAll('.bs-item').forEach(el=>
+      el.addEventListener('click',()=>{selectBand(el.dataset.name);closeOverlay();}));
+  }
+
+  function selectBand(name){
+    selected=name;
+    searchBtn.classList.add('active');
+    const vols=bandMap.get(name)||[];
+    evEls.forEach(el=>el.style.display=vols.includes(parseInt(el.dataset.vol))?'':'none');
+    filterChip.innerHTML=`<div class="filter-chip-inner">${name}<span class="filter-chip-x" id="filterClear">✕</span></div>`;
+    filterChip.classList.add('on');
+    document.getElementById('filterClear').addEventListener('click',clearFilter);
+  }
+
+  function clearFilter(){
+    selected=null;
+    searchBtn.classList.remove('active');
+    evEls.forEach(el=>el.style.display='');
+    filterChip.classList.remove('on');
+    filterChip.innerHTML='';
+  }
+
+  function openOverlay(){overlay.classList.add('on');renderList();setTimeout(()=>bsInp.focus(),100);}
+  function closeOverlay(){overlay.classList.remove('on');bsInp.value='';}
+
+  searchBtn.addEventListener('click',openOverlay);
+  document.getElementById('bsClose').addEventListener('click',closeOverlay);
+  bsInp.addEventListener('input',()=>renderList(bsInp.value));
+})();
 
 // PCLOUD PHOTOS
 const PCLOUD_CODE='kZLRP7JZe4OHRHQKM6hCVF5PVfkDO0yrJqy7';
