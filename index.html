@@ -230,11 +230,18 @@ a{color:inherit}
 }
 .dr-day:first-of-type{margin-top:0}
 .act{
-  display:flex;align-items:baseline;gap:10px;
+  display:flex;align-items:center;gap:8px;
   padding:9px 0;border-bottom:1px solid var(--rule)
 }
 .act-copy{font-size:14.5px;font-weight:600;flex:1;min-width:0;word-break:break-all}
 .act-orig{font-size:11.5px;color:var(--fg2);white-space:nowrap}
+.act-vid-btn{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;color:var(--fg3);letter-spacing:.04em;
+  border:1px solid var(--rule);border-radius:12px;
+  padding:2px 8px;transition:all .15s;
+}
+.act-vid-btn:hover{color:var(--accent);border-color:var(--accent)}
 
 /* COMMENTS */
 .cmt-toggle{
@@ -377,19 +384,31 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 .act-photo{width:82px;height:82px;object-fit:cover;border-radius:8px;cursor:pointer}
 .act-video-wrap{border-radius:10px;overflow:hidden;aspect-ratio:16/9;margin-bottom:9px}
 .act-video-wrap iframe{width:100%;height:100%;border:0;display:block}
-.act-vid-toggle{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:11.5px;color:var(--fg2);
-  border:1px solid var(--rule);border-radius:14px;
-  padding:4px 12px;margin:4px 0 8px;
-  transition:all .15s;background:none;cursor:pointer;
+/* VIDEO MODAL */
+.vid-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .22s;
 }
-.act-vid-toggle:hover{border-color:var(--fg3);color:var(--fg)}
-.act-vid-toggle.open{color:var(--accent);border-color:var(--accent)}
-.act-vid-toggle .tog-icon{font-style:normal;font-size:13px;transition:transform .2s}
-.act-vid-toggle.open .tog-icon{transform:rotate(45deg)}
-.act-vids{display:none}
-.act-vids.open{display:block}
+.vid-overlay.on{opacity:1;pointer-events:auto}
+.vid-modal{
+  background:var(--drawer-bg);border-radius:16px;
+  max-width:560px;width:calc(100% - 32px);
+  max-height:82vh;overflow-y:auto;padding:20px 20px 24px;
+}
+.vid-modal-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.vid-modal-name{font-size:15px;font-weight:700;flex:1;min-width:0}
+.vid-modal-orig{font-size:11px;color:var(--fg2);margin-left:6px;white-space:nowrap}
+.vid-modal-close{
+  width:30px;height:30px;border-radius:50%;
+  border:1px solid var(--rule);font-size:17px;color:var(--fg2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-left:10px;transition:all .15s;
+}
+.vid-modal-close:hover{border-color:var(--fg3);color:var(--fg)}
 </style>
 </head>
 <body>
@@ -434,6 +453,17 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 </div>
 
 <!-- 管理者ログインモーダル -->
+<div class="vid-overlay" id="vidOverlay">
+  <div class="vid-modal" id="vidModal">
+    <div class="vid-modal-hd">
+      <span class="vid-modal-name" id="vidModalName"></span>
+      <span class="vid-modal-orig" id="vidModalOrig"></span>
+      <button class="vid-modal-close" id="vidModalClose">×</button>
+    </div>
+    <div id="vidModalBody"></div>
+  </div>
+</div>
+
 <div class="adm-overlay" id="admLoginOverlay">
   <div class="adm-card">
     <p class="adm-h">管理者ログイン</p>
@@ -823,6 +853,7 @@ const overlay=document.getElementById('overlay');
 const drawer=document.getElementById('drawer');
 const drContent=document.getElementById('drContent');
 let currentEv=null;
+let _actMap={};
 
 function actKey(vol,idx){return 'v'+vol+'_'+idx;}
 function getStore(){try{return JSON.parse(localStorage.getItem('nibanme_data')||'{}')}catch{return{}}}
@@ -830,26 +861,27 @@ function ytEmbed(url){
   const m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]+)/);
   return m?'https://www.youtube.com/embed/'+m[1]:null;
 }
-function renderActMedia(a,vol,idx){
+function actVids(a,vol,idx){
   const hardVids=(a&&a.vids)||[];
   const d=(getStore()[actKey(vol,idx)])||null;
-  if(!d&&!hardVids.length)return'';
+  return [...hardVids,...((d&&d.videos)||[])];
+}
+function renderActMedia(a,vol,idx){
+  const d=(getStore()[actKey(vol,idx)])||null;
+  if(!d)return'';
   let h='<div class="act-data">';
-  if(d&&d.setlist&&d.setlist.length)
+  if(d.setlist&&d.setlist.length)
     h+=`<div class="act-setlist-box"><div class="act-setlist-lbl">Setlist</div><ol class="act-setlist-ol">${d.setlist.map(s=>`<li>${s}</li>`).join('')}</ol></div>`;
-  if(d&&d.photos&&d.photos.length)
+  if(d.photos&&d.photos.length)
     h+=`<div class="act-photos-row">${d.photos.map(p=>`<img src="${p}" class="act-photo" alt="">`).join('')}</div>`;
-  const vids=[...hardVids,...((d&&d.videos)||[])];
-  if(vids.length){
-    const embeds=vids.map(v=>{const e=ytEmbed(v);return e?`<div class="act-video-wrap"><iframe src="${e}" allowfullscreen loading="lazy"></iframe></div>`:''}).join('');
-    h+=`<button class="act-vid-toggle"><i class="tog-icon">+</i>動画 ${vids.length}本</button><div class="act-vids">${embeds}</div>`;
-  }
   h+='</div>';
   return h==='<div class="act-data"></div>'?'':h;
 }
 function renderActRow(a,vol,idx){
+  const vids=actVids(a,vol,idx);
+  const vidBtn=vids.length?`<button class="act-vid-btn" data-key="${actKey(vol,idx)}">▶ ${vids.length}本</button>`:'';
   const editBtn=`<button class="act-edit-btn" data-key="${actKey(vol,idx)}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
-  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${editBtn}</div>${renderActMedia(a,vol,idx)}`;
+  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${vidBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}`;
 }
 
 function openDrawer(ev,showCmts){
@@ -862,13 +894,14 @@ function openDrawer(ev,showCmts){
 
   let actsHtml='';
   let gi=0;
+  _actMap={};
   if(days){
     days.forEach(d=>{
       actsHtml+=`<div class="dr-day">${d.label}</div>`;
-      d.acts.forEach(a=>{actsHtml+=renderActRow(a,ev.vol,gi++);});
+      d.acts.forEach(a=>{_actMap[actKey(ev.vol,gi)]={a,vol:ev.vol,idx:gi};actsHtml+=renderActRow(a,ev.vol,gi++);});
     });
   }else{
-    allActs.forEach(a=>{actsHtml+=renderActRow(a,ev.vol,gi++);});
+    allActs.forEach(a=>{_actMap[actKey(ev.vol,gi)]={a,vol:ev.vol,idx:gi};actsHtml+=renderActRow(a,ev.vol,gi++);});
   }
 
   let cmtHtml='';
@@ -906,10 +939,13 @@ function openDrawer(ev,showCmts){
     drContent.querySelector('#cmtSection').classList.toggle('open');
   });
 
-  drContent.querySelectorAll('.act-vid-toggle').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      btn.classList.toggle('open');
-      btn.nextElementSibling.classList.toggle('open');
+  drContent.querySelectorAll('.act-vid-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const key=btn.dataset.key;
+      const info=_actMap[key];
+      if(!info)return;
+      openVidModal(info.a,info.vol,info.idx);
     });
   });
 
@@ -931,6 +967,30 @@ function closeDrawer(){
   overlay.classList.remove('on');
   document.body.style.overflow='';
 }
+
+// VIDEO MODAL
+const vidOverlay=document.getElementById('vidOverlay');
+const vidModalName=document.getElementById('vidModalName');
+const vidModalOrig=document.getElementById('vidModalOrig');
+const vidModalBody=document.getElementById('vidModalBody');
+const vidModalClose=document.getElementById('vidModalClose');
+
+function openVidModal(a,vol,idx){
+  const vids=actVids(a,vol,idx);
+  vidModalName.textContent=a.c;
+  vidModalOrig.textContent='('+a.o+')';
+  vidModalBody.innerHTML=vids.map(v=>{
+    const e=ytEmbed(v);
+    return e?`<div class="act-video-wrap"><iframe src="${e}" allowfullscreen loading="lazy"></iframe></div>`:'';
+  }).join('');
+  vidOverlay.classList.add('on');
+}
+function closeVidModal(){
+  vidOverlay.classList.remove('on');
+  vidModalBody.innerHTML='';
+}
+vidModalClose.addEventListener('click',closeVidModal);
+vidOverlay.addEventListener('click',e=>{if(e.target===vidOverlay)closeVidModal();});
 
 overlay.addEventListener('click',closeDrawer);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
