@@ -55,6 +55,40 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 
+/* SHARE */
+.hd-share-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:var(--fg3);transition:all .18s;
+}
+.hd-share-btn:hover{border-color:var(--fg3);color:var(--fg)}
+.hd-share-wrap{position:relative}
+.site-share-popup{
+  position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:var(--bg);border:1px solid var(--rule);
+  border-radius:12px;padding:8px;gap:6px;
+  display:none;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.15);
+  min-width:110px;
+}
+.site-share-popup.on{display:flex;flex-direction:column}
+.sh-line,.sh-x{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;
+  text-decoration:none;white-space:nowrap;
+}
+.sh-line{background:#06C755;color:#fff}
+.sh-x{background:#111;color:#fff}
+.sh-pill-line,.sh-pill-x{
+  font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;
+  text-decoration:none;display:inline-block;line-height:1.5;
+}
+.sh-pill-line{background:#06C755;color:#fff}
+.sh-pill-x{background:#111;color:#fff}
+.ev-foot-share{display:flex;align-items:center;gap:4px}
+.dr-share{display:flex;gap:6px;margin:8px 0 14px}
+.dr-share .sh-line,.dr-share .sh-x{flex:1;font-size:12px;padding:7px 10px}
+.act-share-row{display:flex;gap:4px;padding:2px 0 7px}
+
 /* SPLASH */
 #splash{
   position:fixed;inset:0;z-index:9999;background:#000;cursor:pointer;
@@ -494,6 +528,13 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 <header class="hd">
   <div class="hd-inner">
     <div class="hd-toolbar">
+      <div class="hd-share-wrap">
+        <button class="hd-share-btn" id="siteShareBtn" title="このサイトを共有">↑</button>
+        <div class="site-share-popup" id="siteSharePopup">
+          <a class="sh-line" id="siteShareLine" href="#" target="_blank" rel="noopener">LINE</a>
+          <a class="sh-x" id="siteShareX" href="#" target="_blank" rel="noopener">𝕏</a>
+        </div>
+      </div>
       <button class="hd-search-btn" id="searchBtn" title="出演バンドで絞り込む">🔍</button>
       <a href="https://www.youtube.com/@%E6%B0%B8%E9%81%A0%E3%81%AE%E4%BA%8C%E7%95%AA%E6%89%8B%E3%83%AD%E3%83%83%E3%82%AF%E3%83%95%E3%82%A7%E3%82%B9" class="hd-yt-btn" target="_blank" rel="noopener" title="YouTube チャンネル">▶</a>
       <a href="https://x.com/no2rockers" class="hd-x-btn" target="_blank" rel="noopener" title="@no2rockers on X">𝕏</a>
@@ -862,6 +903,19 @@ const EVS=[
   {vol:1,ds:'2012年頃',unknown:true},
 ];
 
+// SHARE HELPERS
+const SITE_URL=location.origin+location.pathname;
+function evLineHref(ev){
+  const t=`永遠の二番手ロックフェス Vol.${ev.vol} ${ev.ds}`;
+  const u=SITE_URL+'#vol'+ev.vol;
+  return `https://line.me/R/msg/text/?${encodeURIComponent(t+'\n'+u)}`;
+}
+function evXHref(ev){
+  const t=`永遠の二番手ロックフェス Vol.${ev.vol} ${ev.ds}`;
+  const u=SITE_URL+'#vol'+ev.vol;
+  return `https://x.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(u)}`;
+}
+
 // RENDER LIST
 const listEl=document.getElementById('evList');
 EVS.forEach(ev=>{
@@ -894,11 +948,15 @@ EVS.forEach(ev=>{
     <div class="ev-acts">${preview}</div>
     <div class="ev-foot">
       <span class="ev-ticket">${ev.ticket}</span>
+      <span class="ev-foot-share">
+        <a class="sh-pill-line ev-share-link" href="${evLineHref(ev)}" target="_blank" rel="noopener">LINE</a>
+        <a class="sh-pill-x ev-share-link" href="${evXHref(ev)}" target="_blank" rel="noopener">𝕏</a>
+      </span>
       <button class="ev-cmt-btn">💬</button>
     </div>`;
 
   el.addEventListener('click',e=>{
-    if(e.target.closest('.ev-cmt-btn'))return;
+    if(e.target.closest('.ev-cmt-btn,.ev-share-link'))return;
     openDrawer(ev,false);
   });
   el.querySelector('.ev-cmt-btn').addEventListener('click',e=>{
@@ -1041,7 +1099,11 @@ function renderActRow(a,vol,idx){
   const editBtn=`<button class="act-edit-btn" data-key="${key}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
   const photoBtn=a.photos?`<button class="act-photos-btn" data-pfid="${a.photos}">📷</button>`:'';
   const photoDiv=a.photos?`<div class="pcloud-photos" data-pfid="${a.photos}"></div>`:'';
-  return `<div class="act"><span class="act-copy">${displayName}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
+  const actText=`${displayName}（${a.o}）@ 永遠の二番手ロックフェス Vol.${vol}`;
+  const actUrl=SITE_URL+'#vol'+vol;
+  const actLine=`<a class="sh-pill-line" href="https://line.me/R/msg/text/?${encodeURIComponent(actText+'\n'+actUrl)}" target="_blank" rel="noopener">LINE</a>`;
+  const actX=`<a class="sh-pill-x" href="https://x.com/intent/tweet?text=${encodeURIComponent(actText)}&url=${encodeURIComponent(actUrl)}" target="_blank" rel="noopener">𝕏</a>`;
+  return `<div class="act"><span class="act-copy">${displayName}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div><div class="act-share-row">${actLine}${actX}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
 }
 
 function openDrawer(ev,showCmts){
@@ -1084,6 +1146,10 @@ function openDrawer(ev,showCmts){
     <div class="dr-info"><span>OPEN/START ${ev.open}</span><span>TICKET ${ev.ticket}</span></div>
     ${ev.note?`<span class="dr-note">${ev.note}</span>`:''}
     ${imgHtml}
+    <div class="dr-share">
+      <a class="sh-line" href="${evLineHref(ev)}" target="_blank" rel="noopener">LINE</a>
+      <a class="sh-x" href="${evXHref(ev)}" target="_blank" rel="noopener">𝕏</a>
+    </div>
     <p class="dr-acts-lbl">出演</p>
     ${actsHtml}
     ${cmtHtml?`
@@ -1299,6 +1365,26 @@ document.getElementById('admSaveBtn').addEventListener('click',()=>{
   if(currentEv)openDrawer(currentEv,false);
 });
 
+// SITE SHARE POPUP
+(function(){
+  const btn=document.getElementById('siteShareBtn');
+  const popup=document.getElementById('siteSharePopup');
+  const siteText='永遠の二番手ロックフェス — 名古屋コピバンフェス 2012-2023';
+  document.getElementById('siteShareLine').href=`https://line.me/R/msg/text/?${encodeURIComponent(siteText+'\n'+SITE_URL)}`;
+  document.getElementById('siteShareX').href=`https://x.com/intent/tweet?text=${encodeURIComponent(siteText)}&url=${encodeURIComponent(SITE_URL)}`;
+  btn.addEventListener('click',e=>{e.stopPropagation();popup.classList.toggle('on');});
+  document.addEventListener('click',()=>popup.classList.remove('on'));
+})();
+
+// DEEP LINK
+(function(){
+  const m=location.hash.match(/^#vol(\d+)/);
+  if(m){
+    const ev=EVS.find(e=>e.vol===parseInt(m[1]));
+    if(ev)setTimeout(()=>openDrawer(ev,false),200);
+  }
+})();
+
 // SPLASH
 (function(){
   const SPLASH_CODE='kZl9P7JZUJW6oLDb9Nb2maJv5U8SnkiCSb57';
@@ -1328,7 +1414,7 @@ document.getElementById('admSaveBtn').addEventListener('click',()=>{
       const imgs=files.map(f=>{
         const img=document.createElement('img');
         img.className='splash-img';
-        img.src=`https://api.pcloud.com/getpubthumb?code=${SPLASH_CODE}&fileid=${f.fileid}&size=1920x1080`;
+        img.src=`https://api.pcloud.com/getpubthumb?code=${SPLASH_CODE}&fileid=${f.fileid}&size=1920x1920`;
         sp.insertBefore(img,bar);
         return img;
       });
