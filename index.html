@@ -250,15 +250,116 @@ a{color:inherit}
   .dr-inner{padding:18px 18px 56px}
 }
 @media(prefers-reduced-motion:reduce){
-  .drawer,.overlay{transition:none}
+  .drawer,.overlay,.adm-overlay{transition:none}
   .next-dot{animation:none}
 }
+
+/* ── ADMIN ── */
+.adm-btn{
+  position:absolute;bottom:22px;right:24px;
+  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fg3);padding:3px 10px;border:1px solid var(--rule);
+  border-radius:20px;cursor:pointer;transition:all .15s;font-family:inherit
+}
+.adm-btn:hover{border-color:var(--fg3);color:var(--fg)}
+body[data-admin] .adm-btn{color:var(--accent);border-color:var(--accent)}
+
+.adm-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .22s
+}
+.adm-overlay.on{opacity:1;pointer-events:auto}
+.adm-card{
+  background:var(--bg);border-radius:18px;padding:28px 24px;
+  width:min(440px,calc(100vw - 32px));max-height:85vh;overflow-y:auto;
+  box-shadow:0 8px 64px rgba(0,0,0,.28)
+}
+.adm-h{font-size:15px;font-weight:700;margin-bottom:20px;line-height:1.3}
+.adm-lbl{
+  font-size:9.5px;letter-spacing:.13em;color:var(--fg3);
+  text-transform:uppercase;display:block;margin-bottom:6px
+}
+.adm-input,.adm-ta{
+  width:100%;padding:10px 12px;background:var(--bg2);
+  border:1px solid var(--rule);border-radius:8px;
+  color:var(--fg);font:inherit;font-size:13px;
+  transition:border-color .15s
+}
+.adm-input:focus,.adm-ta:focus{outline:none;border-color:var(--fg2)}
+.adm-input.err{border-color:var(--accent)}
+.adm-ta{min-height:88px;resize:vertical;line-height:1.65}
+.adm-sec{margin-bottom:18px}
+.adm-photos{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.adm-thumb-wrap{position:relative;display:inline-block}
+.adm-thumb{width:72px;height:72px;object-fit:cover;border-radius:8px}
+.adm-thumb-del{
+  position:absolute;top:-5px;right:-5px;width:18px;height:18px;
+  background:var(--bg);border:1px solid var(--rule);border-radius:50%;
+  font-size:11px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--fg2);line-height:1
+}
+.adm-thumb-del:hover{color:var(--accent);border-color:var(--accent)}
+.adm-add-photo{
+  width:72px;height:72px;border-radius:8px;border:1.5px dashed var(--rule);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:var(--fg3);cursor:pointer;transition:.15s
+}
+.adm-add-photo:hover{border-color:var(--fg2);color:var(--fg)}
+.adm-vid-row{display:flex;gap:8px;margin-top:7px;align-items:center}
+.adm-vid-row .adm-input{flex:1}
+.adm-vid-del{font-size:18px;color:var(--fg3);cursor:pointer;flex-shrink:0;padding:0 4px}
+.adm-vid-del:hover{color:var(--accent)}
+.adm-add-link{
+  font-size:12px;color:var(--fg2);margin-top:9px;cursor:pointer;
+  font-family:inherit;display:inline-block
+}
+.adm-save{
+  width:100%;padding:12px;background:var(--fg);color:var(--bg);
+  border-radius:10px;font-weight:700;font-size:14px;
+  cursor:pointer;transition:opacity .15s;margin-top:6px;font-family:inherit
+}
+.adm-save:hover{opacity:.78}
+.adm-cancel-btn{
+  width:100%;padding:10px;color:var(--fg2);font-size:12.5px;
+  cursor:pointer;margin-top:6px;font-family:inherit
+}
+
+/* edit button on each act (admin only, hidden otherwise) */
+.act-edit-btn{
+  display:none;margin-left:auto;font-size:9.5px;color:var(--accent);
+  padding:2px 8px;border:1px solid var(--accent);border-radius:10px;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit;
+  transition:all .15s;align-self:center
+}
+.act-edit-btn:hover{background:var(--accent);color:#fff}
+body[data-admin] .act-edit-btn{display:inline-flex}
+
+/* stored media in drawer */
+.act-data{margin:0 0 12px}
+.act-setlist-box{
+  background:var(--bg2);border-radius:8px;
+  padding:10px 14px;margin-bottom:9px
+}
+.act-setlist-lbl{
+  font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--fg3);margin-bottom:7px
+}
+.act-setlist-ol{
+  margin:0;padding-left:18px;font-size:12.5px;
+  color:var(--fg2);line-height:2
+}
+.act-photos-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.act-photo{width:82px;height:82px;object-fit:cover;border-radius:8px;cursor:pointer}
+.act-video-wrap{border-radius:10px;overflow:hidden;aspect-ratio:16/9;margin-bottom:9px}
+.act-video-wrap iframe{width:100%;height:100%;border:0;display:block}
 </style>
 </head>
 <body>
 
 <header class="hd">
   <button class="theme-btn" id="themeBtn" title="テーマ切替">◐</button>
+  <button class="adm-btn" id="admBtn">Admin</button>
   <div class="hd-inner">
     <p class="hd-eyebrow">Nagoya · Copyband Festival · 2012–2023</p>
     <h1 class="hd-title">永遠の二番手<br>ロックフェス</h1>
@@ -287,6 +388,45 @@ a{color:inherit}
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="イベント詳細">
   <div class="dr-handle-wrap"><div class="dr-handle"></div></div>
   <div class="dr-scroll"><div class="dr-inner" id="drContent"></div></div>
+</div>
+
+<!-- 管理者ログインモーダル -->
+<div class="adm-overlay" id="admLoginOverlay">
+  <div class="adm-card">
+    <p class="adm-h">管理者ログイン</p>
+    <div class="adm-sec">
+      <label class="adm-lbl" for="admPwInput">パスワード</label>
+      <input type="password" id="admPwInput" class="adm-input" placeholder="パスワードを入力">
+    </div>
+    <button class="adm-save" id="admLoginBtn">ログイン</button>
+    <button class="adm-cancel-btn" id="admLoginCancel">キャンセル</button>
+  </div>
+</div>
+
+<!-- バンド編集モーダル -->
+<div class="adm-overlay" id="admEditOverlay">
+  <div class="adm-card">
+    <p class="adm-h" id="admEditTitle">投稿</p>
+    <div class="adm-sec">
+      <label class="adm-lbl">セットリスト（1行1曲）</label>
+      <textarea class="adm-ta" id="admSetlist" placeholder="M1. 曲タイトル&#10;M2. 曲タイトル&#10;M3. 曲タイトル"></textarea>
+    </div>
+    <div class="adm-sec">
+      <label class="adm-lbl">動画（YouTube URL）</label>
+      <div id="admVideos"></div>
+      <button type="button" class="adm-add-link" id="admAddVideo">＋ 動画URLを追加</button>
+    </div>
+    <div class="adm-sec">
+      <label class="adm-lbl">写真</label>
+      <div class="adm-photos" id="admPhotos">
+        <label class="adm-add-photo" id="admAddPhotoLabel">
+          ＋<input type="file" id="admPhotoFile" accept="image/*" multiple style="display:none">
+        </label>
+      </div>
+    </div>
+    <button class="adm-save" id="admSaveBtn">保存</button>
+    <button class="adm-cancel-btn" id="admEditCancel">キャンセル</button>
+  </div>
 </div>
 
 <script>
@@ -611,24 +751,49 @@ EVS.forEach(ev=>{
 const overlay=document.getElementById('overlay');
 const drawer=document.getElementById('drawer');
 const drContent=document.getElementById('drContent');
+let currentEv=null;
+
+function actKey(vol,idx){return 'v'+vol+'_'+idx;}
+function getStore(){try{return JSON.parse(localStorage.getItem('nibanme_data')||'{}')}catch{return{}}}
+function ytEmbed(url){
+  const m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]+)/);
+  return m?'https://www.youtube.com/embed/'+m[1]:null;
+}
+function renderActMedia(vol,idx){
+  const d=(getStore()[actKey(vol,idx)])||null;
+  if(!d)return'';
+  let h='<div class="act-data">';
+  if(d.setlist&&d.setlist.length)
+    h+=`<div class="act-setlist-box"><div class="act-setlist-lbl">Setlist</div><ol class="act-setlist-ol">${d.setlist.map(s=>`<li>${s}</li>`).join('')}</ol></div>`;
+  if(d.photos&&d.photos.length)
+    h+=`<div class="act-photos-row">${d.photos.map(p=>`<img src="${p}" class="act-photo" alt="">`).join('')}</div>`;
+  if(d.videos&&d.videos.length)
+    d.videos.forEach(v=>{const e=ytEmbed(v);if(e)h+=`<div class="act-video-wrap"><iframe src="${e}" allowfullscreen loading="lazy"></iframe></div>`;});
+  h+='</div>';
+  return h==='<div class="act-data"></div>'?'':h;
+}
+function renderActRow(a,vol,idx){
+  const editBtn=`<button class="act-edit-btn" data-key="${actKey(vol,idx)}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
+  return `<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span>${editBtn}</div>${renderActMedia(vol,idx)}`;
+}
 
 function openDrawer(ev,showCmts){
-  const allActs=ev.acts||[];
+  currentEv=ev;
   const days=ev.days||null;
+  const allActs=ev.acts||[];
 
   const imgSrc=ev.img&&IMGS[ev.img]?IMGS[ev.img]:null;
-  const imgHtml=imgSrc
-    ?`<div class="dr-flyer"><img src="${imgSrc}" alt="Vol.${ev.vol}" loading="lazy"></div>`
-    :'';
+  const imgHtml=imgSrc?`<div class="dr-flyer"><img src="${imgSrc}" alt="Vol.${ev.vol}" loading="lazy"></div>`:'';
 
   let actsHtml='';
+  let gi=0;
   if(days){
     days.forEach(d=>{
       actsHtml+=`<div class="dr-day">${d.label}</div>`;
-      d.acts.forEach(a=>{actsHtml+=`<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span></div>`;});
+      d.acts.forEach(a=>{actsHtml+=renderActRow(a,ev.vol,gi++);});
     });
   }else{
-    allActs.forEach(a=>{actsHtml+=`<div class="act"><span class="act-copy">${a.c}</span><span class="act-orig">(${a.o})</span></div>`;});
+    allActs.forEach(a=>{actsHtml+=renderActRow(a,ev.vol,gi++);});
   }
 
   let cmtHtml='';
@@ -641,9 +806,7 @@ function openDrawer(ev,showCmts){
       </div>`;
     });
   }
-  if(ev.sq){
-    cmtHtml+=`<a href="${ev.sq}" target="_blank" rel="noopener" class="cmt-search">𝕏 でこの時期のツイートをすべて見る →</a>`;
-  }
+  if(ev.sq)cmtHtml+=`<a href="${ev.sq}" target="_blank" rel="noopener" class="cmt-search">𝕏 でこの時期のツイートをすべて見る →</a>`;
 
   drContent.innerHTML=`
     <p class="dr-eyebrow">永遠の二番手ロックフェス</p>
@@ -663,12 +826,17 @@ function openDrawer(ev,showCmts){
     `:''}`;
 
   const tog=drContent.querySelector('#cmtToggle');
-  if(tog){
-    tog.addEventListener('click',()=>{
-      tog.classList.toggle('open');
-      drContent.querySelector('#cmtSection').classList.toggle('open');
+  if(tog)tog.addEventListener('click',()=>{
+    tog.classList.toggle('open');
+    drContent.querySelector('#cmtSection').classList.toggle('open');
+  });
+
+  drContent.querySelectorAll('.act-edit-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      openEditModal(btn.dataset.key,btn.dataset.name);
     });
-  }
+  });
 
   drawer.classList.add('on');
   overlay.classList.add('on');
@@ -703,6 +871,111 @@ themeBtn.addEventListener('click',()=>{
   const next=isDark?'light':'dark';
   root.dataset.theme=next;
   localStorage.setItem('nbm-theme',next);
+});
+
+// ==================== ADMIN ====================
+const ADMIN_PW='no2rock';
+let adminMode=sessionStorage.getItem('nibanme_auth')==='1';
+if(adminMode)document.body.dataset.admin='1';
+
+function saveStore(d){localStorage.setItem('nibanme_data',JSON.stringify(d));}
+
+const admBtn=document.getElementById('admBtn');
+const admLoginOverlay=document.getElementById('admLoginOverlay');
+const admEditOverlay=document.getElementById('admEditOverlay');
+
+// ログイン/ログアウト
+admBtn.addEventListener('click',()=>{
+  if(adminMode){
+    adminMode=false;
+    sessionStorage.removeItem('nibanme_auth');
+    delete document.body.dataset.admin;
+    admBtn.textContent='Admin';
+    return;
+  }
+  admLoginOverlay.classList.add('on');
+  setTimeout(()=>document.getElementById('admPwInput').focus(),60);
+});
+document.getElementById('admLoginCancel').addEventListener('click',()=>{
+  admLoginOverlay.classList.remove('on');
+  document.getElementById('admPwInput').value='';
+});
+admLoginOverlay.addEventListener('click',e=>{if(e.target===admLoginOverlay)admLoginOverlay.classList.remove('on');});
+document.getElementById('admLoginBtn').addEventListener('click',()=>{
+  const pw=document.getElementById('admPwInput').value;
+  if(pw===ADMIN_PW){
+    adminMode=true;
+    sessionStorage.setItem('nibanme_auth','1');
+    document.body.dataset.admin='1';
+    admBtn.textContent='Admin ✓';
+    admLoginOverlay.classList.remove('on');
+    document.getElementById('admPwInput').value='';
+    if(currentEv)openDrawer(currentEv,false);
+  }else{
+    const inp=document.getElementById('admPwInput');
+    inp.classList.add('err');
+    setTimeout(()=>inp.classList.remove('err'),600);
+  }
+});
+document.getElementById('admPwInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter')document.getElementById('admLoginBtn').click();
+});
+
+// 編集モーダル
+let editKey=null,editData=null;
+
+function renderAdmVideos(){
+  const c=document.getElementById('admVideos');
+  c.innerHTML=editData.videos.map((v,i)=>`
+    <div class="adm-vid-row">
+      <input type="url" class="adm-input adm-vid-inp" value="${v.replace(/"/g,'&quot;')}" placeholder="https://youtube.com/watch?v=..." data-i="${i}">
+      <span class="adm-vid-del" data-vi="${i}">×</span>
+    </div>`).join('');
+  if(!editData.videos.length)
+    c.innerHTML='<div class="adm-vid-row"><input type="url" class="adm-input adm-vid-inp" placeholder="https://youtube.com/watch?v=..."></div>';
+  c.querySelectorAll('.adm-vid-del').forEach(b=>b.addEventListener('click',()=>{
+    editData.videos.splice(parseInt(b.dataset.vi),1);renderAdmVideos();
+  }));
+}
+function renderAdmPhotos(){
+  const c=document.getElementById('admPhotos');
+  const thumbs=editData.photos.map((p,i)=>`
+    <div class="adm-thumb-wrap">
+      <img src="${p}" class="adm-thumb" alt="">
+      <span class="adm-thumb-del" data-pi="${i}">×</span>
+    </div>`).join('');
+  c.innerHTML=thumbs+`<label class="adm-add-photo">＋<input type="file" id="admPhotoFile" accept="image/*" multiple style="display:none"></label>`;
+  c.querySelectorAll('.adm-thumb-del').forEach(b=>b.addEventListener('click',()=>{
+    editData.photos.splice(parseInt(b.dataset.pi),1);renderAdmPhotos();
+  }));
+  document.getElementById('admPhotoFile').addEventListener('change',async e=>{
+    for(const f of [...e.target.files]){
+      const b64=await new Promise(res=>{const r=new FileReader();r.onload=ev=>res(ev.target.result);r.readAsDataURL(f);});
+      editData.photos.push(b64);
+    }
+    renderAdmPhotos();
+  });
+}
+
+function openEditModal(key,name){
+  editKey=key;
+  const stored=(getStore()[key])||{setlist:[],videos:[],photos:[]};
+  editData={setlist:[...(stored.setlist||[])],videos:[...(stored.videos||[])],photos:[...(stored.photos||[])]};
+  document.getElementById('admEditTitle').textContent=name+' — 投稿';
+  document.getElementById('admSetlist').value=editData.setlist.join('\n');
+  renderAdmVideos();
+  renderAdmPhotos();
+  admEditOverlay.classList.add('on');
+}
+document.getElementById('admAddVideo').addEventListener('click',()=>{editData.videos.push('');renderAdmVideos();});
+document.getElementById('admEditCancel').addEventListener('click',()=>admEditOverlay.classList.remove('on'));
+admEditOverlay.addEventListener('click',e=>{if(e.target===admEditOverlay)admEditOverlay.classList.remove('on');});
+document.getElementById('admSaveBtn').addEventListener('click',()=>{
+  editData.videos=[...document.querySelectorAll('.adm-vid-inp')].map(i=>i.value.trim()).filter(Boolean);
+  editData.setlist=document.getElementById('admSetlist').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const s=getStore();s[editKey]=editData;saveStore(s);
+  admEditOverlay.classList.remove('on');
+  if(currentEv)openDrawer(currentEv,false);
 });
 </script>
 </body>
