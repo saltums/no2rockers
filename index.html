@@ -377,6 +377,19 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 .act-photo{width:82px;height:82px;object-fit:cover;border-radius:8px;cursor:pointer}
 .act-video-wrap{border-radius:10px;overflow:hidden;aspect-ratio:16/9;margin-bottom:9px}
 .act-video-wrap iframe{width:100%;height:100%;border:0;display:block}
+.act-vid-toggle{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;color:var(--fg2);
+  border:1px solid var(--rule);border-radius:14px;
+  padding:4px 12px;margin:4px 0 8px;
+  transition:all .15s;background:none;cursor:pointer;
+}
+.act-vid-toggle:hover{border-color:var(--fg3);color:var(--fg)}
+.act-vid-toggle.open{color:var(--accent);border-color:var(--accent)}
+.act-vid-toggle .tog-icon{font-style:normal;font-size:13px;transition:transform .2s}
+.act-vid-toggle.open .tog-icon{transform:rotate(45deg)}
+.act-vids{display:none}
+.act-vids.open{display:block}
 </style>
 </head>
 <body>
@@ -827,7 +840,10 @@ function renderActMedia(a,vol,idx){
   if(d&&d.photos&&d.photos.length)
     h+=`<div class="act-photos-row">${d.photos.map(p=>`<img src="${p}" class="act-photo" alt="">`).join('')}</div>`;
   const vids=[...hardVids,...((d&&d.videos)||[])];
-  vids.forEach(v=>{const e=ytEmbed(v);if(e)h+=`<div class="act-video-wrap"><iframe src="${e}" allowfullscreen loading="lazy"></iframe></div>`;});
+  if(vids.length){
+    const embeds=vids.map(v=>{const e=ytEmbed(v);return e?`<div class="act-video-wrap"><iframe src="${e}" allowfullscreen loading="lazy"></iframe></div>`:''}).join('');
+    h+=`<button class="act-vid-toggle"><i class="tog-icon">+</i>動画 ${vids.length}本</button><div class="act-vids">${embeds}</div>`;
+  }
   h+='</div>';
   return h==='<div class="act-data"></div>'?'':h;
 }
@@ -888,6 +904,13 @@ function openDrawer(ev,showCmts){
   if(tog)tog.addEventListener('click',()=>{
     tog.classList.toggle('open');
     drContent.querySelector('#cmtSection').classList.toggle('open');
+  });
+
+  drContent.querySelectorAll('.act-vid-toggle').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      btn.classList.toggle('open');
+      btn.nextElementSibling.classList.toggle('open');
+    });
   });
 
   drContent.querySelectorAll('.act-edit-btn').forEach(btn=>{
