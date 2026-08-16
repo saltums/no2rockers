@@ -240,6 +240,9 @@ a{color:inherit}
   font-size:14px;color:var(--fg3);flex-shrink:0;transition:.15s;
 }
 .bs-close:hover{border-color:var(--fg3);color:var(--fg)}
+.bs-tabs{display:flex;border-bottom:1px solid var(--rule);flex-shrink:0}
+.bs-tab{flex:1;padding:10px 0;font-size:13px;color:var(--fg3);border-bottom:2px solid transparent;transition:.15s;background:none;cursor:pointer}
+.bs-tab.active{color:var(--fg);border-bottom-color:var(--accent)}
 .bs-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .bs-item{
   display:flex;justify-content:space-between;align-items:center;
@@ -569,6 +572,10 @@ body[data-admin] .act-edit-btn{display:inline-flex}
   <div class="bs-header">
     <input type="search" id="bsInp" class="bs-inp" placeholder="絞り込む…" autocomplete="off">
     <button class="bs-close" id="bsClose">✕</button>
+  </div>
+  <div class="bs-tabs">
+    <button class="bs-tab active" data-mode="orig">アーティスト名</button>
+    <button class="bs-tab" data-mode="copy">コピバン名</button>
   </div>
   <div class="bs-list" id="bsList"></div>
 </div>
@@ -1080,23 +1087,27 @@ EVS.forEach(ev=>{
 
 // BAND SEARCH
 (function(){
-  const bandMap=new Map();
+  const origMap=new Map();
+  const copyMap=new Map();
   EVS.forEach(ev=>{
+    const addTo=(map,key)=>{
+      if(!key||key==='—')return;
+      if(!map.has(key))map.set(key,[]);
+      if(!map.get(key).includes(ev.vol))map.get(key).push(ev.vol);
+    };
     const add=acts=>(acts||[]).forEach(a=>{
-      const addKey=k=>{
-        if(!k||k==='—')return;
-        if(!bandMap.has(k))bandMap.set(k,[]);
-        if(!bandMap.get(k).includes(ev.vol))bandMap.get(k).push(ev.vol);
-      };
-      addKey(a.o);
-      if(a.c&&a.c!==a.o)addKey(a.c);
+      addTo(origMap,a.o);
+      if(a.c)addTo(copyMap,a.c);
     });
     if(ev.acts)add(ev.acts);
     if(ev.days)ev.days.forEach(d=>add(d.acts));
   });
-  const bands=[...bandMap.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ja'));
+  const sortFn=(a,b)=>a[0].localeCompare(b[0],'ja');
+  const origBands=[...origMap.entries()].sort(sortFn);
+  const copyBands=[...copyMap.entries()].sort(sortFn);
 
   let selected=null;
+  let mode='orig';
   const overlay=document.getElementById('bandSearchOverlay');
   const bsInp=document.getElementById('bsInp');
   const bsList=document.getElementById('bsList');
@@ -1104,8 +1115,11 @@ EVS.forEach(ev=>{
   const searchBtn=document.getElementById('searchBtn');
   const evEls=[...document.querySelectorAll('.ev')];
 
+  function currentBands(){return mode==='copy'?copyBands:origBands;}
+  function currentMap(){return mode==='copy'?copyMap:origMap;}
+
   function renderList(q=''){
-    const items=q?bands.filter(([n])=>n.toLowerCase().includes(q.toLowerCase())):bands;
+    const items=q?currentBands().filter(([n])=>n.toLowerCase().includes(q.toLowerCase())):currentBands();
     bsList.innerHTML=items.map(([name,vols])=>
       `<div class="bs-item${selected===name?' selected':''}" data-name="${name.replace(/"/g,'&quot;')}">
         <span class="bs-item-name">${name}</span>
@@ -1118,7 +1132,7 @@ EVS.forEach(ev=>{
   function selectBand(name){
     selected=name;
     searchBtn.classList.add('active');
-    const vols=bandMap.get(name)||[];
+    const vols=currentMap().get(name)||[];
     evEls.forEach(el=>el.style.display=vols.includes(parseInt(el.dataset.vol))?'':'none');
     filterChip.innerHTML=`<div class="filter-chip-inner">${name}<span class="filter-chip-x" id="filterClear">✕</span></div>`;
     filterChip.classList.add('on');
@@ -1135,6 +1149,16 @@ EVS.forEach(ev=>{
 
   function openOverlay(){overlay.classList.add('on');renderList();setTimeout(()=>bsInp.focus(),100);}
   function closeOverlay(){overlay.classList.remove('on');bsInp.value='';}
+
+  document.querySelectorAll('.bs-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      mode=tab.dataset.mode;
+      document.querySelectorAll('.bs-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      bsInp.value='';
+      renderList();
+    });
+  });
 
   searchBtn.addEventListener('click',openOverlay);
   document.getElementById('bsClose').addEventListener('click',closeOverlay);
