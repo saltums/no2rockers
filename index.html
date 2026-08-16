@@ -211,6 +211,23 @@ a{color:inherit}
 .ev-act-link:hover,.ev-act-link:active{text-decoration:underline;text-underline-offset:2px}
 .ev-act-sep{color:var(--fg3);font-weight:300;padding:0 2px}
 
+/* TITLE INTRO ANIMATION */
+.hd-eyebrow{opacity:0;transform:translateY(8px)}
+.hd-title-en{opacity:0;transform:translateY(8px)}
+.hd-tl-wrap{display:block;overflow:hidden}
+.hd-tl{display:block;transform:translateY(110%)}
+.hd--revealed .hd-tl{animation:hd-rise .72s cubic-bezier(.22,1,.36,1) both}
+.hd--revealed .hd-tl-wrap:nth-child(2) .hd-tl{animation-delay:.17s}
+.hd--revealed .hd-eyebrow{animation:hd-fade-up .5s cubic-bezier(.22,1,.36,1) .38s both}
+.hd--revealed .hd-title-en{animation:hd-fade-up .45s ease .62s both}
+@keyframes hd-rise{from{transform:translateY(110%)}to{transform:translateY(0)}}
+@keyframes hd-fade-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){
+  .hd-eyebrow,.hd-title-en{opacity:1;transform:none}
+  .hd-tl{transform:none}
+  .hd--revealed .hd-tl,.hd--revealed .hd-eyebrow,.hd--revealed .hd-title-en{animation:none}
+}
+
 /* BAND SEARCH */
 .hd-search-btn{
   width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
@@ -599,7 +616,7 @@ body[data-admin] .act-edit-btn{display:inline-flex}
       <button class="adm-btn" id="admBtn" title="Admin">⚙</button>
     </div>
     <p class="hd-eyebrow">Nagoya · Copyband Festival · 2012–2023</p>
-    <h1 class="hd-title">永遠の二番手<br>ロックフェス</h1>
+    <h1 class="hd-title"><span class="hd-tl-wrap"><span class="hd-tl">永遠の二番手</span></span><span class="hd-tl-wrap"><span class="hd-tl">ロックフェス</span></span></h1>
     <p class="hd-title-en">Eien no Nibante Rock Festival</p>
   </div>
 </header>
@@ -1662,6 +1679,7 @@ document.getElementById('admSaveBtn').addEventListener('click',()=>{
   function dismiss(){
     clearTimeout(timer);
     sp.classList.add('out');
+    setTimeout(()=>{const h=document.querySelector('header.hd');if(h)h.classList.add('hd--revealed');},500);
     setTimeout(()=>sp.remove(),800);
   }
   sp.addEventListener('click',dismiss);
