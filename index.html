@@ -591,7 +591,7 @@ body[data-admin] .act-edit-btn{display:inline-flex}
     </div>
     <p class="hd-eyebrow">Nagoya · Copyband Festival · 2012–2023</p>
     <h1 class="hd-title">永遠の二番手<br>ロックフェス</h1>
-    <p class="hd-title-en">Eien no Nibanme Rock Festival</p>
+    <p class="hd-title-en">Eien no Nibante Rock Festival</p>
   </div>
 </header>
 
@@ -1085,9 +1085,13 @@ EVS.forEach(ev=>{
   const bandMap=new Map();
   EVS.forEach(ev=>{
     const add=acts=>(acts||[]).forEach(a=>{
-      if(!a.o||a.o==='—')return;
-      if(!bandMap.has(a.o))bandMap.set(a.o,[]);
-      if(!bandMap.get(a.o).includes(ev.vol))bandMap.get(a.o).push(ev.vol);
+      const addKey=k=>{
+        if(!k||k==='—')return;
+        if(!bandMap.has(k))bandMap.set(k,[]);
+        if(!bandMap.get(k).includes(ev.vol))bandMap.get(k).push(ev.vol);
+      };
+      addKey(a.o);
+      if(a.c&&a.c!==a.o)addKey(a.c);
     });
     if(ev.acts)add(ev.acts);
     if(ev.days)ev.days.forEach(d=>add(d.acts));
