@@ -1181,6 +1181,7 @@
     "ticket": "¥500",
     "open": "16:00 / 16:30",
     "img": "vol6",
+    "sq": "https://x.com/search?q=from%3Ano2rockers+since%3A2014-08-01+until%3A2014-11-30&f=live",
     "acts": [
       {
         "c": "Lunatic Justice Dawn",
@@ -1218,7 +1219,7 @@
         ]
       },
       {
-        "c": "ゲスのthe乙女〜極〜",
+        "c": "ゲス of the乙女〜極〜",
         "o": "ゲスの極み乙女。",
         "vids": [
           "https://www.youtube.com/watch?v=iXutZmX6h5U"
@@ -1255,8 +1256,7 @@
         "t": "昨日は永遠の二番手ロックフェスvol.6でした！台風も無事に来ず、終始天気の良い中開催されました！主催としては最高の出演者に恵まれて、お客さんも過去最多の134人集まり幸せな時間でした！本当にありがとうございました！vol.7も鋭意計画中です！",
         "url": "https://x.com/no2rockers/status/521481965392785408"
       }
-    ],
-    "sq": "https://x.com/search?q=from%3Ano2rockers+since%3A2014-08-01+until%3A2014-11-30&f=live"
+    ]
   },
   {
     "vol": 5,
