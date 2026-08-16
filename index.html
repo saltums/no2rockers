@@ -941,6 +941,7 @@ const EVS=[
   },
   {vol:65,special:true,name:'BUMP[K]NIGHT!!',
    ds:'2015.02.15',dd:'2015年2月15日（日）',venue:'新栄SiX-DOG',ticket:'¥1,000',open:'16:30 / 17:00',
+   flyer:91830864178,
    note:'6バンド全てBUMP OF CHICKEN！BGMも全曲！',
    acts:[
      {c:'アロエ',o:'BUMP OF CHICKEN'},
@@ -969,7 +970,7 @@ const EVS=[
    ],
    sq:'https://x.com/search?q=from%3Ano2rockers+since%3A2014-08-01+until%3A2014-11-30&f=live',
   },
-  {vol:5,ds:'2014.06.28',dd:'2014年6月28日（土）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',
+  {vol:5,ds:'2014.06.28',dd:'2014年6月28日（土）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',flyer:91830865398,
    acts:[
      {c:'180c°',o:'RADWIMPS'},
      {c:'終電ガタンゴトン',o:'東京カランコロン'},
@@ -980,7 +981,7 @@ const EVS=[
      {c:'@ flood of circle',o:'a flood of circle'},
    ],
   },
-  {vol:4,ds:'2014.03.21',dd:'2014年3月21日（金）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',
+  {vol:4,ds:'2014.03.21',dd:'2014年3月21日（金）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',flyer:91830858734,
    acts:[
      {c:'レッツゴー3匹!!',o:'ザ・50回転ズ'},
      {c:'ぽっともっと',o:'ストレイテナー',vids:['https://www.youtube.com/watch?v=v3-PK-cB5BI']},
@@ -991,7 +992,7 @@ const EVS=[
      {c:'ぱふぃ',o:'ASIAN KUNG-FU GENERATION',vids:['https://www.youtube.com/watch?v=DWgOpr8zQ4g'],photos:32797510241},
    ],
   },
-  {vol:3,ds:'2013.10.13',dd:'2013年10月13日（日）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:30 / 17:00',
+  {vol:3,ds:'2013.10.13',dd:'2013年10月13日（日）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:30 / 17:00',flyer:91830866093,
    acts:[
      {c:'Hi,JACK',o:'6% is Mine'},
      {c:'thee Mitchells',o:'THEE MICHELLE GUN ELEPHANT'},
@@ -1003,7 +1004,7 @@ const EVS=[
      {c:'Nhuqueez',o:'フジファブリック'},
    ],
   },
-  {vol:2,ds:'2012.11.24',dd:'2012年11月24日（土）',venue:'新栄SONSET STRIP',ticket:'¥1,000',open:'16:45 / 17:15',
+  {vol:2,ds:'2012.11.24',dd:'2012年11月24日（土）',venue:'新栄SONSET STRIP',ticket:'¥1,000',open:'16:45 / 17:15',flyer:91830864532,
    acts:[
      {c:'バンド名未定',o:'THE BAWDIES'},
      {c:'バンド名未定',o:'Base Ball Bear'},
@@ -1014,7 +1015,7 @@ const EVS=[
      {c:'S2',o:'THE BACK HORN'},
    ],
   },
-  {vol:1,ds:'2012.03.06',dd:'2012年3月6日（火）',venue:'新栄SiX-DOG',ticket:'—',open:'17:15 / 17:30',
+  {vol:1,ds:'2012.03.06',dd:'2012年3月6日（火）',venue:'新栄SiX-DOG',ticket:'—',open:'17:15 / 17:30',flyer:91830863796,
    acts:[
      {c:'パウンド214',o:'—'},
      {c:'Nuqueez',o:'フジファブリック'},
@@ -1230,8 +1231,13 @@ function openDrawer(ev,showCmts){
   const days=ev.days||null;
   const allActs=ev.acts||[];
 
-  const imgSrc=ev.img&&IMGS[ev.img]?IMGS[ev.img]:null;
-  const imgHtml=imgSrc?`<div class="dr-flyer"><img src="${imgSrc}" alt="Vol.${ev.vol}" loading="lazy"></div>`:'';
+  const evLabel=ev.special?ev.name:'Vol.'+ev.vol;
+  let imgHtml='';
+  if(ev.img&&IMGS[ev.img]){
+    imgHtml=`<div class="dr-flyer"><img src="${IMGS[ev.img]}" alt="${evLabel}" loading="lazy"></div>`;
+  }else if(ev.flyer){
+    imgHtml=`<div class="dr-flyer"><img src="https://api.pcloud.com/getpubthumb?code=${PCLOUD_CODE}&fileid=${ev.flyer}&size=640x960" alt="${evLabel}" loading="lazy"></div>`;
+  }
 
   let actsHtml='';
   let gi=0;
@@ -1259,7 +1265,7 @@ function openDrawer(ev,showCmts){
 
   drContent.innerHTML=`
     <p class="dr-eyebrow">永遠の二番手ロックフェス</p>
-    <h2 class="dr-vol">Vol.${ev.vol}</h2>
+    <h2 class="dr-vol">${evLabel}</h2>
     <p class="dr-date">${ev.dd}</p>
     <p class="dr-venue">${ev.venue}</p>
     <div class="dr-info"><span>OPEN/START ${ev.open}</span><span>TICKET ${ev.ticket}</span></div>
