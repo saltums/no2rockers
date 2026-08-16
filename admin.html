@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>二番手フェス 管理画面</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#252525;--border:#333;
+  --fg:#f0f0f0;--fg2:#aaa;--fg3:#666;
+  --accent:#e05a2b;--accent2:#ff7043;
+  --green:#4caf50;--red:#ef5350;--blue:#42a5f5;
+  --r:8px;--r2:4px;
+}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
+
+/* ── LAYOUT ── */
+.header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.header h1{font-size:16px;font-weight:700;flex:1}
+.main{padding:16px;max-width:900px;margin:0 auto}
+
+/* ── BUTTONS ── */
+button{cursor:pointer;border:none;border-radius:var(--r2);font-size:13px;font-weight:600;padding:7px 14px;transition:.15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2)}
+.btn-ghost{background:transparent;color:var(--fg2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg3);color:var(--fg)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid var(--red)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-sm{padding:4px 10px;font-size:12px}
+.btn-icon{padding:6px 8px;font-size:16px;background:transparent;color:var(--fg2);border:none}
+.btn-icon:hover{color:var(--fg)}
+
+/* ── EVENT LIST ── */
+.ev-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.ev-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;align-items:flex-start;gap:12px;cursor:default}
+.ev-row:hover{border-color:#555}
+.ev-vol{font-size:22px;font-weight:800;color:var(--fg3);min-width:44px;line-height:1}
+.ev-info{flex:1;min-width:0}
+.ev-title{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-meta{font-size:12px;color:var(--fg2);margin-top:2px}
+.ev-acts{font-size:12px;color:var(--fg3);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-actions{display:flex;gap:6px;flex-shrink:0}
+
+/* ── MODAL/OVERLAY ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:20px}
+.overlay.on{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:680px;margin:auto}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.modal-header h2{font-size:16px;flex:1}
+.modal-body{padding:20px;display:flex;flex-direction:column;gap:20px}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+
+/* ── FORM ── */
+.section-title{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;color:var(--fg2)}
+.field-row{display:flex;gap:12px}
+.field-row .field{flex:1}
+input[type=text],input[type=number],input[type=url],textarea,select{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);
+  color:var(--fg);font-size:13px;padding:8px 10px;width:100%;outline:none;transition:.15s;font-family:inherit}
+input[type=text]:focus,input[type=number]:focus,input[type=url]:focus,textarea:focus,select:focus{border-color:var(--accent)}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+textarea{resize:vertical;min-height:70px}
+.hint{font-size:11px;color:var(--fg3)}
+
+/* ── ACTS EDITOR ── */
+.acts-editor{display:flex;flex-direction:column;gap:8px}
+.act-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
+.act-item-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.act-item-num{font-size:11px;color:var(--fg3);font-weight:700;min-width:24px}
+.act-item-name{font-size:13px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act-item-body{display:flex;flex-direction:column;gap:8px}
+.act-collapse{display:none}
+.act-collapse.open{display:block}
+
+/* ── DAYS TABS ── */
+.days-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px}
+.days-tab{flex:1;padding:8px;font-size:13px;font-weight:600;color:var(--fg3);cursor:pointer;text-align:center;border-bottom:2px solid transparent;transition:.15s;background:none}
+.days-tab.active{color:var(--fg);border-bottom-color:var(--accent)}
+
+/* ── CMTS EDITOR ── */
+.cmt-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.cmt-item-top{display:flex;gap:8px;align-items:center}
+.cmt-item-top input{flex:1}
+
+/* ── STATUS ── */
+.status{font-size:13px;padding:8px 12px;border-radius:var(--r2)}
+.status.ok{background:#1b3a1d;color:#81c784}
+.status.err{background:#3a1b1b;color:#e57373}
+.status.info{color:var(--fg2)}
+
+/* ── SETTINGS ── */
+.settings-modal .modal-body{gap:14px}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <h1>🎸 二番手フェス 管理</h1>
+  <button class="btn-primary" id="addBtn">＋ イベント追加</button>
+  <button class="btn-ghost" id="settingsBtn">⚙ GitHub設定</button>
+</div>
+
+<div class="main">
+  <div id="statusBar" class="status info" style="margin-bottom:12px;display:none"></div>
+  <div class="ev-list" id="evList">
+    <div style="color:var(--fg3);text-align:center;padding:40px">読み込み中…</div>
+  </div>
+</div>
+
+<!-- ── SETTINGS MODAL ── -->
+<div class="overlay" id="settingsOverlay">
+  <div class="modal settings-modal" style="max-width:480px">
+    <div class="modal-header">
+      <h2>GitHub 設定</h2>
+      <button class="btn-icon" id="settingsClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Personal Access Token（repo スコープ必要）</label>
+        <input type="text" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+        <span class="hint">Settings → Developer settings → Personal access tokens → Fine-grained tokens</span>
+      </div>
+      <div id="settingsStatus" class="status" style="display:none"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" id="settingsCancel">キャンセル</button>
+      <button class="btn-primary" id="settingsSave">保存して読み込む</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── EVENT EDIT MODAL ── -->
+<div class="overlay" id="editOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="editTitle">イベント編集</h2>
+      <button class="btn-icon" id="editClose">✕</button>
+    </div>
+    <div class="modal-body" id="editBody">
+      <!-- 基本情報 -->
+      <div>
+        <div class="section-title">基本情報</div>
+        <div class="field-row">
+          <div class="field" style="max-width:100px">
+            <label>Vol</label>
+            <input type="number" id="fVol" min="1" placeholder="19">
+          </div>
+          <div class="field">
+            <label>日付文字列 <span class="hint">例: 2024.05.03 または 2024.05.03+04</span></label>
+            <input type="text" id="fDs" placeholder="2024.05.03">
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label>表示用日付</label>
+          <input type="text" id="fDd" placeholder="2024年5月3日（金）">
+        </div>
+        <div class="field-row" style="margin-top:10px">
+          <div class="field">
+            <label>会場</label>
+            <input type="text" id="fVenue" placeholder="今池GROW">
+          </div>
+          <div class="field" style="max-width:180px">
+            <label>チケット</label>
+            <input type="text" id="fTicket" placeholder="¥500">
+          </div>
+        </div>
+        <div class="field-row" style="margin-top:10px">
+          <div class="field">
+            <label>OPEN / START</label>
+            <input type="text" id="fOpen" placeholder="16:00 / 16:30">
+          </div>
+          <div class="field">
+            <label>備考 (note)</label>
+            <input type="text" id="fNote" placeholder="SiX-DOG Finale 2Days">
+          </div>
+        </div>
+        <div style="display:flex;gap:20px;margin-top:12px;align-items:center">
+          <label style="display:flex;gap:6px;align-items:center;cursor:pointer">
+            <input type="checkbox" id="fTwoDay"> 2days イベント
+          </label>
+          <label style="display:flex;gap:6px;align-items:center;cursor:pointer">
+            <input type="checkbox" id="fSpecial"> スペシャルイベント
+          </label>
+        </div>
+        <div id="fSpecialNameWrap" class="field" style="margin-top:10px;display:none">
+          <label>イベント名（スペシャル用）</label>
+          <input type="text" id="fSpecialName" placeholder="BUMP[K]NIGHT!!">
+        </div>
+        <div id="fTwoDayDates" style="margin-top:10px;display:none">
+          <div class="field-row">
+            <div class="field">
+              <label>DAY1 日付文字列</label>
+              <input type="text" id="fDate1" placeholder="2024.05.03">
+            </div>
+            <div class="field">
+              <label>DAY2 日付文字列</label>
+              <input type="text" id="fDate2" placeholder="2024.05.04">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 演者 -->
+      <div>
+        <div class="section-title">演者</div>
+        <div id="actsWrap"><!-- single or 2day --></div>
+      </div>
+
+      <!-- メディア -->
+      <div>
+        <div class="section-title">メディア</div>
+        <div class="field-row">
+          <div class="field">
+            <label>img キー <span class="hint">例: vol19</span></label>
+            <input type="text" id="fImg" placeholder="vol19">
+          </div>
+          <div class="field">
+            <label>flyer（pCloud ファイルID）</label>
+            <input type="number" id="fFlyer" placeholder="91830865398">
+          </div>
+        </div>
+      </div>
+
+      <!-- ツイート -->
+      <div>
+        <div class="section-title">ツイート / コメント</div>
+        <div class="acts-editor" id="cmtsEditor"></div>
+        <button class="btn-ghost btn-sm" id="addCmtBtn" style="margin-top:8px">＋ ツイート追加</button>
+        <div class="field" style="margin-top:12px">
+          <label>𝕏 検索 URL (sq)</label>
+          <input type="url" id="fSq" placeholder="https://x.com/search?q=...">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div id="editStatus" class="status" style="flex:1;display:none"></div>
+      <button class="btn-ghost" id="editCancel">キャンセル</button>
+      <button class="btn-primary" id="editSave">GitHubに保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+const OWNER='saltums',REPO='no2rockers',FILE='events.json',BRANCH='master';
+const TOKEN_KEY='__gh_admin_token__';
+const API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`;
+
+// ── STATE ──
+let events=[],sha='',editIdx=null;
+// editIdx: null=new, number=index in events[]
+// per-day acts for 2day form
+let formActs=[[],[]]; // [day0acts, day1acts] or [allActs]
+
+// ── HELPERS ──
+const $=id=>document.getElementById(id);
+const tok=()=>localStorage.getItem(TOKEN_KEY)||'';
+const ghHeaders=()=>({'Authorization':`Bearer ${tok()}`,'Accept':'application/vnd.github+json'});
+function showStatus(elId,msg,type='info'){
+  const el=$(elId);el.textContent=msg;el.className='status '+type;el.style.display=msg?'':'none';
+}
+
+// ── GITHUB API ──
+async function loadEvents(){
+  if(!tok()){showSettingsModal();return;}
+  showStatus('statusBar','読み込み中…','info');
+  try{
+    const r=await fetch(API+'?t='+Date.now(),{headers:ghHeaders()});
+    if(!r.ok)throw new Error(`${r.status} ${r.statusText}`);
+    const d=await r.json();
+    sha=d.sha;
+    events=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    renderList();
+    showStatus('statusBar','');
+  }catch(e){showStatus('statusBar','読み込み失敗: '+e.message,'err');}
+}
+
+async function saveEvents(msg){
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(events,null,2))));
+  showStatus('editStatus','保存中…','info');
+  try{
+    const r=await fetch(API,{
+      method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},
+      body:JSON.stringify({message:msg||'Update events via admin',content,sha,branch:BRANCH})
+    });
+    if(!r.ok)throw new Error(`${r.status} ${r.statusText}`);
+    const d=await r.json();
+    sha=d.content.sha;
+    showStatus('editStatus','✓ 保存完了','ok');
+    setTimeout(()=>{$('editOverlay').classList.remove('on');renderList();},1200);
+  }catch(e){showStatus('editStatus','保存失敗: '+e.message,'err');}
+}
+
+// ── LIST RENDER ──
+function renderList(){
+  const el=$('evList');
+  if(!events.length){el.innerHTML='<div style="color:var(--fg3);text-align:center;padding:40px">イベントなし</div>';return;}
+  el.innerHTML=events.map((ev,i)=>{
+    const allActs=ev.acts||(ev.days?ev.days.flatMap(d=>d.acts):[]);
+    const actsPreview=allActs.map(a=>a.c).join(' / ').substring(0,60);
+    const label=ev.special?`★ ${ev.name}`:`Vol.${ev.vol}`;
+    return `<div class="ev-row">
+      <div class="ev-vol">${ev.special?'★':String(ev.vol).padStart(2,'0')}</div>
+      <div class="ev-info">
+        <div class="ev-title">${label} — ${ev.venue}</div>
+        <div class="ev-meta">${ev.ds}${ev.note?' · '+ev.note:''}</div>
+        <div class="ev-acts">${actsPreview}</div>
+      </div>
+      <div class="ev-actions">
+        <button class="btn-ghost btn-sm" onclick="openEdit(${i})">編集</button>
+        <button class="btn-danger btn-sm" onclick="deleteEv(${i})">削除</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── DELETE ──
+function deleteEv(i){
+  const ev=events[i];
+  const label=ev.special?ev.name:`Vol.${ev.vol}`;
+  if(!confirm(`「${label}」を削除しますか？`))return;
+  events.splice(i,1);
+  saveEventsFromList(label+'を削除');
+}
+async function saveEventsFromList(msg){
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(events,null,2))));
+  showStatus('statusBar','保存中…','info');
+  try{
+    const r=await fetch(API,{
+      method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},
+      body:JSON.stringify({message:msg||'Update events',content,sha,branch:BRANCH})
+    });
+    if(!r.ok)throw new Error(`${r.status}`);
+    const d=await r.json();sha=d.content.sha;
+    showStatus('statusBar','✓ 保存完了','ok');
+    renderList();
+    setTimeout(()=>showStatus('statusBar',''),3000);
+  }catch(e){showStatus('statusBar','保存失敗: '+e.message,'err');}
+}
+
+// ── ACTS EDITOR ──
+let twoDayMode=false;
+let activeDay=0;
+
+function makeActObj(){return {c:'',o:'',vids:[],photos:''};}
+
+function renderActsSection(){
+  const wrap=$('actsWrap');
+  twoDayMode=$('fTwoDay').checked;
+
+  if(twoDayMode){
+    // Ensure formActs has 2 arrays
+    if(!Array.isArray(formActs[0]))formActs=[[[],[]]][0];
+    if(formActs.length<2)formActs=[[],[]];
+    wrap.innerHTML=`
+      <div class="days-tabs">
+        <button class="days-tab${activeDay===0?' active':''}" onclick="setDay(0)">DAY 1</button>
+        <button class="days-tab${activeDay===1?' active':''}" onclick="setDay(1)">DAY 2</button>
+      </div>
+      <div id="actsList"></div>
+      <button class="btn-ghost btn-sm" onclick="addAct()" style="margin-top:8px">＋ バンド追加</button>`;
+  }else{
+    wrap.innerHTML=`
+      <div id="actsList"></div>
+      <button class="btn-ghost btn-sm" onclick="addAct()" style="margin-top:8px">＋ バンド追加</button>`;
+  }
+  renderActsList();
+}
+
+function setDay(d){activeDay=d;renderActsSection();}
+
+function currentActs(){return twoDayMode?formActs[activeDay]:formActs[0];}
+
+function renderActsList(){
+  const acts=currentActs();
+  const el=$('actsList');
+  if(!el)return;
+  el.innerHTML=acts.map((a,i)=>`
+    <div class="act-item">
+      <div class="act-item-header">
+        <span class="act-item-num">${i+1}</span>
+        <span class="act-item-name">${a.c||'(未入力)'}</span>
+        <button class="btn-icon btn-sm" onclick="moveAct(${i},-1)" title="上へ">↑</button>
+        <button class="btn-icon btn-sm" onclick="moveAct(${i},1)" title="下へ">↓</button>
+        <button class="btn-icon btn-sm" style="color:var(--red)" onclick="removeAct(${i})" title="削除">×</button>
+      </div>
+      <div class="act-item-body">
+        <div class="field-row">
+          <div class="field">
+            <label>コピバン名</label>
+            <input type="text" value="${esc(a.c)}" oninput="updateAct(${i},'c',this.value)" placeholder="コピバン名">
+          </div>
+          <div class="field">
+            <label>アーティスト名</label>
+            <input type="text" value="${esc(a.o)}" oninput="updateAct(${i},'o',this.value)" placeholder="アーティスト名">
+          </div>
+        </div>
+        <div class="field">
+          <label>YouTube URL（1行1つ）</label>
+          <textarea oninput="updateAct(${i},'vids',this.value)" placeholder="https://youtube.com/watch?v=...">${(a.vids||[]).join('\n')}</textarea>
+        </div>
+        <div class="field">
+          <label>pCloud 写真フォルダID（任意）</label>
+          <input type="number" value="${a.photos||''}" oninput="updateAct(${i},'photos',this.value)" placeholder="32797510109">
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function esc(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function updateAct(i,key,val){
+  const acts=currentActs();
+  if(key==='vids'){acts[i].vids=val.split('\n').map(s=>s.trim()).filter(Boolean);}
+  else if(key==='photos'){acts[i].photos=val?parseInt(val):undefined;}
+  else{acts[i][key]=val;}
+  // Refresh header name without full re-render
+  const headers=document.querySelectorAll('.act-item-name');
+  if(headers[i])headers[i].textContent=acts[i].c||'(未入力)';
+}
+
+function addAct(){currentActs().push(makeActObj());renderActsList();}
+
+function removeAct(i){
+  if(!confirm('このバンドを削除しますか？'))return;
+  currentActs().splice(i,1);renderActsList();
+}
+
+function moveAct(i,dir){
+  const acts=currentActs();
+  const j=i+dir;
+  if(j<0||j>=acts.length)return;
+  [acts[i],acts[j]]=[acts[j],acts[i]];renderActsList();
+}
+
+// ── CMTS EDITOR ──
+let formCmts=[];
+
+function makeCmt(){return {h:'@no2rockers',d:'',t:'',url:''};}
+
+function renderCmts(){
+  const el=$('cmtsEditor');
+  el.innerHTML=formCmts.map((c,i)=>`
+    <div class="cmt-item">
+      <div class="cmt-item-top">
+        <input type="text" value="${esc(c.h)}" oninput="updateCmt(${i},'h',this.value)" placeholder="@handle" style="max-width:140px">
+        <input type="text" value="${esc(c.d)}" oninput="updateCmt(${i},'d',this.value)" placeholder="2024.05.03" style="max-width:120px">
+        <button class="btn-icon" style="color:var(--red)" onclick="removeCmt(${i})">×</button>
+      </div>
+      <textarea oninput="updateCmt(${i},'t',this.value)" placeholder="ツイート本文">${esc(c.t)}</textarea>
+      <input type="url" value="${esc(c.url)}" oninput="updateCmt(${i},'url',this.value)" placeholder="https://x.com/...">
+    </div>`).join('');
+}
+
+function updateCmt(i,k,v){formCmts[i][k]=v;}
+function removeCmt(i){formCmts.splice(i,1);renderCmts();}
+$('addCmtBtn').addEventListener('click',()=>{formCmts.push(makeCmt());renderCmts();});
+
+// ── 2-day toggle ──
+$('fTwoDay').addEventListener('change',()=>{
+  $('fTwoDayDates').style.display=$('fTwoDay').checked?'':'none';
+  renderActsSection();
+});
+$('fSpecial').addEventListener('change',()=>{
+  $('fSpecialNameWrap').style.display=$('fSpecial').checked?'':'none';
+});
+
+// ── OPEN EDIT ──
+function openEdit(idx){
+  editIdx=idx;
+  activeDay=0;
+  const isNew=(idx===null);
+  const ev=isNew?{}:events[idx];
+  $('editTitle').textContent=isNew?'イベント追加':`Vol.${ev.vol} 編集`;
+
+  // Fill basic fields
+  $('fVol').value=ev.vol||'';
+  $('fDs').value=ev.ds||'';
+  $('fDd').value=ev.dd||'';
+  $('fVenue').value=ev.venue||'';
+  $('fTicket').value=ev.ticket||'';
+  $('fOpen').value=ev.open||'';
+  $('fNote').value=ev.note||'';
+  $('fImg').value=ev.img||'';
+  $('fFlyer').value=ev.flyer||'';
+  $('fSq').value=ev.sq||'';
+  $('fSpecial').checked=!!ev.special;
+  $('fSpecialName').value=ev.name||'';
+  $('fSpecialNameWrap').style.display=ev.special?'':'none';
+
+  const isTwoDay=!!(ev.days&&ev.days.length);
+  $('fTwoDay').checked=isTwoDay;
+  $('fTwoDayDates').style.display=isTwoDay?'':'none';
+  if(isTwoDay&&ev.dayDates){
+    $('fDate1').value=ev.dayDates[0]||'';
+    $('fDate2').value=ev.dayDates[1]||'';
+  }else{
+    $('fDate1').value='';$('fDate2').value='';
+  }
+
+  // Acts
+  if(isTwoDay){
+    formActs=[
+      (ev.days[0]?.acts||[]).map(a=>({c:a.c||'',o:a.o||'',vids:[...(a.vids||[])],photos:a.photos||''})),
+      (ev.days[1]?.acts||[]).map(a=>({c:a.c||'',o:a.o||'',vids:[...(a.vids||[])],photos:a.photos||''}))
+    ];
+  }else{
+    formActs=[
+      (ev.acts||[]).map(a=>({c:a.c||'',o:a.o||'',vids:[...(a.vids||[])],photos:a.photos||''})),
+      []
+    ];
+  }
+
+  // Cmts
+  formCmts=(ev.cmts||[]).map(c=>({h:c.h||'',d:c.d||'',t:c.t||'',url:c.url||''}));
+
+  renderActsSection();
+  renderCmts();
+  showStatus('editStatus','');
+  $('editOverlay').classList.add('on');
+  $('editOverlay').scrollTop=0;
+}
+
+// ── COLLECT & SAVE ──
+function collectActObj(a){
+  const o={c:a.c,o:a.o};
+  if(a.vids&&a.vids.length)o.vids=a.vids;
+  if(a.photos)o.photos=parseInt(a.photos);
+  return o;
+}
+
+$('editSave').addEventListener('click',async()=>{
+  const vol=parseInt($('fVol').value);
+  if(!vol){showStatus('editStatus','Vol が必要です','err');return;}
+  const isTwoDay=$('fTwoDay').checked;
+  const isSpecial=$('fSpecial').checked;
+
+  const ev={vol};
+  if(isSpecial){ev.special=true;ev.name=$('fSpecialName').value.trim();}
+  ev.ds=$('fDs').value.trim();
+  ev.dd=$('fDd').value.trim();
+  ev.venue=$('fVenue').value.trim();
+  ev.ticket=$('fTicket').value.trim();
+  ev.open=$('fOpen').value.trim();
+  const note=$('fNote').value.trim();if(note)ev.note=note;
+  const img=$('fImg').value.trim();if(img)ev.img=img;
+  const flyer=$('fFlyer').value.trim();if(flyer)ev.flyer=parseInt(flyer);
+  const sq=$('fSq').value.trim();if(sq)ev.sq=sq;
+
+  // Collect latest act values from DOM before saving
+  const inputs=document.querySelectorAll('#actsList .act-item');
+  inputs.forEach((item,i)=>{
+    const acts=currentActs();
+    const ci=item.querySelectorAll('input[type=text]');
+    const ta=item.querySelector('textarea');
+    const ni=item.querySelector('input[type=number]');
+    if(ci[0])acts[i].c=ci[0].value;
+    if(ci[1])acts[i].o=ci[1].value;
+    if(ta)acts[i].vids=ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
+    if(ni)acts[i].photos=ni.value?parseInt(ni.value):'';
+  });
+
+  if(isTwoDay){
+    const d1label=`DAY 1${$('fDate1').value?' — '+$('fDate1').value.replace(/\d{4}\.\d{2}\./,m=>{const [,mo,d]=$('fDate1').value.split('.');return parseInt(mo)+'月'+parseInt(d)+'日（'})}）`||'DAY 1';
+    const d2label='DAY 2';
+    ev.dayDates=[$('fDate1').value,$('fDate2').value].filter(Boolean);
+    ev.days=[
+      {label:buildDayLabel($('fDate1').value,1),acts:formActs[0].map(collectActObj)},
+      {label:buildDayLabel($('fDate2').value,2),acts:formActs[1].map(collectActObj)}
+    ];
+  }else{
+    ev.acts=formActs[0].map(collectActObj);
+  }
+
+  // Cmts
+  const cmtInputs=document.querySelectorAll('#cmtsEditor .cmt-item');
+  cmtInputs.forEach((item,i)=>{
+    const ins=item.querySelectorAll('input');
+    const ta=item.querySelector('textarea');
+    if(ins[0])formCmts[i].h=ins[0].value;
+    if(ins[1])formCmts[i].d=ins[1].value;
+    if(ta)formCmts[i].t=ta.value;
+    if(ins[2])formCmts[i].url=ins[2].value;
+  });
+  if(formCmts.length)ev.cmts=formCmts.filter(c=>c.t||c.url).map(c=>{const o={h:c.h,d:c.d,t:c.t};if(c.url)o.url=c.url;return o;});
+
+  // Insert or update
+  if(editIdx===null){
+    // New: insert at correct position (sorted by vol desc, special events by date)
+    const insertPos=events.findIndex(e=>e.vol<vol);
+    if(insertPos===-1)events.push(ev);else events.splice(insertPos,0,ev);
+  }else{
+    events[editIdx]=ev;
+  }
+
+  await saveEvents(`Vol.${vol} を${editIdx===null?'追加':'更新'}`);
+});
+
+function buildDayLabel(ds,dayNum){
+  if(!ds)return `DAY ${dayNum}`;
+  const parts=ds.split('.');
+  if(parts.length<3)return `DAY ${dayNum} — ${ds}`;
+  const mo=parseInt(parts[1]),d=parseInt(parts[2]);
+  const wdays=['日','月','火','水','木','金','土'];
+  try{
+    const dt=new Date(parseInt(parts[0]),mo-1,d);
+    return `DAY ${dayNum} — ${mo}月${d}日（${wdays[dt.getDay()]}）`;
+  }catch{return `DAY ${dayNum} — ${mo}月${d}日`;}
+}
+
+// ── SETTINGS ──
+function showSettingsModal(){
+  $('tokenInput').value=tok();
+  showStatus('settingsStatus','');
+  $('settingsOverlay').classList.add('on');
+}
+$('settingsBtn').addEventListener('click',showSettingsModal);
+$('settingsClose').addEventListener('click',()=>$('settingsOverlay').classList.remove('on'));
+$('settingsCancel').addEventListener('click',()=>$('settingsOverlay').classList.remove('on'));
+$('settingsSave').addEventListener('click',async()=>{
+  const t=$('tokenInput').value.trim();
+  if(!t){showStatus('settingsStatus','Token を入力してください','err');return;}
+  localStorage.setItem(TOKEN_KEY,t);
+  $('settingsOverlay').classList.remove('on');
+  await loadEvents();
+});
+
+// ── EVENT LISTENERS ──
+$('addBtn').addEventListener('click',()=>openEdit(null));
+$('editClose').addEventListener('click',()=>$('editOverlay').classList.remove('on'));
+$('editCancel').addEventListener('click',()=>$('editOverlay').classList.remove('on'));
+$('editOverlay').addEventListener('click',e=>{if(e.target===$('editOverlay'))$('editOverlay').classList.remove('on');});
+$('settingsOverlay').addEventListener('click',e=>{if(e.target===$('settingsOverlay'))$('settingsOverlay').classList.remove('on');});
+
+// ── INIT ──
+loadEvents();
+</script>
+</body>
+</html>
