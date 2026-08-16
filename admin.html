@@ -566,8 +566,6 @@ $('editSave').addEventListener('click',async()=>{
   });
 
   if(isTwoDay){
-    const d1label=`DAY 1${$('fDate1').value?' — '+$('fDate1').value.replace(/\d{4}\.\d{2}\./,m=>{const [,mo,d]=$('fDate1').value.split('.');return parseInt(mo)+'月'+parseInt(d)+'日（'})}）`||'DAY 1';
-    const d2label='DAY 2';
     ev.dayDates=[$('fDate1').value,$('fDate2').value].filter(Boolean);
     ev.days=[
       {label:buildDayLabel($('fDate1').value,1),acts:formActs[0].map(collectActObj)},
