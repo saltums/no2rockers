@@ -818,6 +818,7 @@
     "ticket": "¥500",
     "open": "16:00 / 16:30",
     "img": "vol9",
+    "sq": "https://x.com/search?q=from%3Ano2rockers+since%3A2016-02-01+until%3A2016-04-30&f=live",
     "acts": [
       {
         "c": "Acoustic Time",
@@ -863,7 +864,7 @@
         "photos": 32797509766
       },
       {
-        "c": "檸檬を噛る彼女",
+        "c": "檸檬をかじる彼女",
         "o": "Base Ball Bear",
         "vids": [
           "https://www.youtube.com/watch?v=rafmidq-Pwg",
@@ -879,8 +880,7 @@
         "t": "永遠の二番手ロックフェスvol.9 集合写真",
         "url": "https://x.com/no2rockers/status/706468634525216770"
       }
-    ],
-    "sq": "https://x.com/search?q=from%3Ano2rockers+since%3A2016-02-01+until%3A2016-04-30&f=live"
+    ]
   },
   {
     "vol": 8,
