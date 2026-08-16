@@ -182,6 +182,7 @@ a{color:inherit}
 .ev:active{background:var(--rule)}
 .ev.unknown{opacity:.38;cursor:default}
 .ev.unknown:hover{background:transparent}
+.ev.special{border-left:3px solid var(--accent)}
 
 .ev-ghost{
   position:absolute;right:-8px;top:50%;transform:translateY(-50%);
@@ -878,7 +879,7 @@ const EVS=[
   },
   {vol:9,ds:'2016.03.05',dd:'2016年3月5日（土）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol9',
    acts:[
-     {c:'樹里麻里',o:'JUDY AND MARY'},
+     {c:'Acoustic Time',o:'—'},
      {c:'尾崎倦怠感',o:'クリープハイプ',vids:['https://www.youtube.com/watch?v=soa2L0RVVmY'],photos:32797509763},
      {c:'lemonty',o:'plenty',vids:['https://www.youtube.com/watch?v=Nd7lVYEwTCs']},
      {c:'クモ少年',o:'スピッツ',vids:['https://www.youtube.com/watch?v=OvAS7aC34vM'],photos:32797509765},
@@ -938,6 +939,18 @@ const EVS=[
    ],
    sq:'https://x.com/search?q=from%3Ano2rockers+since%3A2015-01-01+until%3A2015-04-30&f=live',
   },
+  {vol:65,special:true,name:'BUMP[K]NIGHT!!',
+   ds:'2015.02.15',dd:'2015年2月15日（日）',venue:'新栄SiX-DOG',ticket:'¥1,000',open:'16:30 / 17:00',
+   note:'6バンド全てBUMP OF CHICKEN！BGMも全曲！',
+   acts:[
+     {c:'アロエ',o:'BUMP OF CHICKEN'},
+     {c:'Bamps',o:'BUMP OF CHICKEN'},
+     {c:'foundgirl',o:'BUMP OF CHICKEN'},
+     {c:'BUMP OF THE YEAR ～3年連続受賞～',o:'BUMP OF CHICKEN'},
+     {c:'DARK OF CHICKEN',o:'BUMP OF CHICKEN'},
+     {c:'激渋BOYS&GIRLS',o:'BUMP OF CHICKEN'},
+   ],
+  },
   {vol:6,ds:'2014.10.12',dd:'2014年10月12日（日）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol6',
    acts:[
      {c:'Lunatic Justice Dawn',o:'MAN WITH A MISSION',vids:['https://www.youtube.com/watch?v=j3vIDLkIyCM']},
@@ -956,19 +969,62 @@ const EVS=[
    ],
    sq:'https://x.com/search?q=from%3Ano2rockers+since%3A2014-08-01+until%3A2014-11-30&f=live',
   },
-  {vol:5,ds:'2014年頃',unknown:true},
-  {vol:4,ds:'2014.06.28',dd:'2014年6月28日',venue:'新栄SiX-DOG',ticket:'¥500',
-   note:'一部のみ記録あり',
+  {vol:5,ds:'2014.06.28',dd:'2014年6月28日（土）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',
    acts:[
-     {c:'ほっともっと',o:'—',vids:['https://www.youtube.com/watch?v=v3-PK-cB5BI']},
-     {c:'一fゆらぎ',o:'a flood of circle',vids:['https://www.youtube.com/watch?v=z9fsnS7S7t4'],photos:32797510239},
-     {c:'乙女oftheゲス',o:'ゲスの極み乙女。',vids:['https://www.youtube.com/watch?v=a_7H7IX1Urg'],photos:32797510242},
-     {c:'puffi',o:'PUFFY',vids:['https://www.youtube.com/watch?v=DWgOpr8zQ4g'],photos:32797510241},
+     {c:'180c°',o:'RADWIMPS'},
+     {c:'終電ガタンゴトン',o:'東京カランコロン'},
+     {c:'あの世の果てまで',o:'the pillows'},
+     {c:'KD',o:'ONE OK ROCK'},
+     {c:'1000-FEET',o:'10-FEET'},
+     {c:'KUSHI-BOON',o:'KANA-BOON'},
+     {c:'@ flood of circle',o:'a flood of circle'},
    ],
   },
-  {vol:3,ds:'2013年頃',unknown:true},
-  {vol:2,ds:'2012年頃',unknown:true},
-  {vol:1,ds:'2012年頃',unknown:true},
+  {vol:4,ds:'2014.03.21',dd:'2014年3月21日（金）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',
+   acts:[
+     {c:'レッツゴー3匹!!',o:'ザ・50回転ズ'},
+     {c:'ぽっともっと',o:'ストレイテナー',vids:['https://www.youtube.com/watch?v=v3-PK-cB5BI']},
+     {c:'ヌルヌルヲワタ',o:'チリヌルヲワカ'},
+     {c:'1/fゆらぎ',o:'ゆらゆら帝国',vids:['https://www.youtube.com/watch?v=z9fsnS7S7t4'],photos:32797510239},
+     {c:'ポチ',o:'UNISON SQUARE GARDEN'},
+     {c:'乙女 OF THE ゲス ～極～',o:'ゲスの極み乙女。',vids:['https://www.youtube.com/watch?v=a_7H7IX1Urg'],photos:32797510242},
+     {c:'ぱふぃ',o:'ASIAN KUNG-FU GENERATION',vids:['https://www.youtube.com/watch?v=DWgOpr8zQ4g'],photos:32797510241},
+   ],
+  },
+  {vol:3,ds:'2013.10.13',dd:'2013年10月13日（日）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:30 / 17:00',
+   acts:[
+     {c:'Hi,JACK',o:'6% is Mine'},
+     {c:'thee Mitchells',o:'THEE MICHELLE GUN ELEPHANT'},
+     {c:'LOCKING ON JAPAN',o:'ハヌマーン'},
+     {c:'5432',o:'RADWIMPS'},
+     {c:"Don'tぺろり",o:'モーモールルギャバン'},
+     {c:'ポチ',o:'UNISON SQUARE GARDEN'},
+     {c:'@ flood of circle',o:'a flood of circle'},
+     {c:'Nhuqueez',o:'フジファブリック'},
+   ],
+  },
+  {vol:2,ds:'2012.11.24',dd:'2012年11月24日（土）',venue:'新栄SONSET STRIP',ticket:'¥1,000',open:'16:45 / 17:15',
+   acts:[
+     {c:'バンド名未定',o:'THE BAWDIES'},
+     {c:'バンド名未定',o:'Base Ball Bear'},
+     {c:'Rusk',o:'Superfly'},
+     {c:"Don'tぺろり",o:'モーモールルギャバン'},
+     {c:'Nhuqueez',o:'フジファブリック'},
+     {c:'バンド名未定',o:'a flood of circle'},
+     {c:'S2',o:'THE BACK HORN'},
+   ],
+  },
+  {vol:1,ds:'2012.03.06',dd:'2012年3月6日（火）',venue:'新栄SiX-DOG',ticket:'—',open:'17:15 / 17:30',
+   acts:[
+     {c:'パウンド214',o:'—'},
+     {c:'Nuqueez',o:'フジファブリック'},
+     {c:'ドンペロ',o:'モーモールルギャバン'},
+     {c:'フラッド',o:'a flood of circle'},
+     {c:'LYNX',o:'—'},
+     {c:'DS',o:'THE BACK HORN'},
+     {c:'私とたまご',o:'—'},
+   ],
+  },
 ];
 
 // SHARE HELPERS
@@ -988,7 +1044,7 @@ function evXHref(ev){
 const listEl=document.getElementById('evList');
 EVS.forEach(ev=>{
   const el=document.createElement('div');
-  el.className='ev'+(ev.unknown?' unknown':'');
+  el.className='ev'+(ev.unknown?' unknown':ev.special?' special':'');
   el.dataset.vol=ev.vol;
 
   if(ev.unknown){
@@ -1007,9 +1063,9 @@ EVS.forEach(ev=>{
   const preview=allActs.map(a=>`<em>${a.c}</em>`).join('<span class="ev-act-sep">/</span>');
 
   el.innerHTML=`
-    <div class="ev-ghost">${String(ev.vol).padStart(2,'0')}</div>
+    <div class="ev-ghost">${ev.special?'★':String(ev.vol).padStart(2,'0')}</div>
     <div class="ev-row1">
-      <span class="ev-vol-lbl">Vol.${ev.vol}</span>
+      <span class="ev-vol-lbl">${ev.special?ev.name:'Vol.'+ev.vol}</span>
       ${ev.dayDates?`<span class="ev-date-multi">${ev.dayDates.map((d,i)=>`<span class="ev-day-pair"><span class="ev-day-num">DAY${i+1}</span>${d}</span>`).join('')}</span>`:`<span class="ev-date">${ev.ds}</span>`}
     </div>
     <div class="ev-venue">${ev.venue}${ev.note?` — <span style="color:var(--accent);font-size:11px">${ev.note}</span>`:''}</div>
