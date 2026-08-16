@@ -1234,9 +1234,9 @@ function openDrawer(ev,showCmts){
   const evLabel=ev.special?ev.name:'Vol.'+ev.vol;
   let imgHtml='';
   if(ev.img&&IMGS[ev.img]){
-    imgHtml=`<div class="dr-flyer"><img src="${IMGS[ev.img]}" alt="${evLabel}" loading="lazy"></div>`;
+    imgHtml=`<div class="dr-flyer"><img src="${IMGS[ev.img]}" alt="${evLabel}"></div>`;
   }else if(ev.flyer){
-    imgHtml=`<div class="dr-flyer"><img src="https://api.pcloud.com/getpubthumb?code=${PCLOUD_CODE}&fileid=${ev.flyer}&size=640x960" alt="${evLabel}" loading="lazy"></div>`;
+    imgHtml=`<div class="dr-flyer"><img src="https://api.pcloud.com/getpubthumb?code=${PCLOUD_CODE}&fileid=${ev.flyer}&size=640x960" alt="${evLabel}"></div>`;
   }
 
   let actsHtml='';
