@@ -207,6 +207,8 @@ a{color:inherit}
   line-height:1.85;margin-top:2px
 }
 .ev-acts em{font-style:normal;color:var(--fg);font-weight:500}
+.ev-act-link{cursor:pointer}
+.ev-act-link:hover,.ev-act-link:active{text-decoration:underline;text-underline-offset:2px}
 .ev-act-sep{color:var(--fg3);font-weight:300;padding:0 2px}
 
 /* BAND SEARCH */
@@ -1070,7 +1072,8 @@ EVS.forEach(ev=>{
   }
 
   const allActs=ev.acts||(ev.days?ev.days.flatMap(d=>d.acts):[]);
-  const preview=allActs.map(a=>`<em>${a.c}</em>`).join('<span class="ev-act-sep">/</span>');
+  const esc=s=>(s||'').replace(/"/g,'&quot;');
+  const preview=allActs.map(a=>`<em class="ev-act-link" data-copy="${esc(a.c)}">${a.c}</em>`).join('<span class="ev-act-sep">/</span>');
 
   el.innerHTML=`
     <div class="ev-ghost">${ev.special?'★':String(ev.vol).padStart(2,'0')}</div>
@@ -1080,6 +1083,13 @@ EVS.forEach(ev=>{
     </div>
     <div class="ev-venue">${ev.venue}${ev.note?` — <span style="color:var(--accent);font-size:11px">${ev.note}</span>`:''}</div>
     <div class="ev-acts">${preview}</div>`;
+
+  el.querySelectorAll('.ev-act-link').forEach(link=>{
+    link.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(window._bsFilter)window._bsFilter(link.dataset.copy,'copy');
+    });
+  });
 
   el.addEventListener('click',()=>openDrawer(ev,false));
   listEl.appendChild(el);
@@ -1149,6 +1159,12 @@ EVS.forEach(ev=>{
 
   function openOverlay(){overlay.classList.add('on');renderList();setTimeout(()=>bsInp.focus(),100);}
   function closeOverlay(){overlay.classList.remove('on');bsInp.value='';}
+
+  window._bsFilter=function(name,filterMode){
+    mode=filterMode;
+    document.querySelectorAll('.bs-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===filterMode));
+    selectBand(name);
+  };
 
   document.querySelectorAll('.bs-tab').forEach(tab=>{
     tab.addEventListener('click',()=>{
