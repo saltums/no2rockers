@@ -753,7 +753,8 @@ const EVS=[
    ],
    sq:'https://x.com/search?q=from%3Ano2rockers+since%3A2019-09-01+until%3A2019-11-30&f=live',
   },
-  {vol:15,ds:'2019.01.12–13',dd:'2019年1月12日（土）・13日（日）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol15',
+  {vol:15,ds:'2019.01.12+13',dd:'2019年1月12日（土）・13日（日）',venue:'新栄SiX-DOG',ticket:'¥500',open:'16:00 / 16:30',img:'vol15',
+   dayDates:['2019.01.12','2019.01.13'],
    note:'SiX-DOG Finale 2Days',
    days:[
      {label:'DAY 1 — 1月12日（土）',acts:[
@@ -1071,10 +1072,7 @@ EVS.forEach(ev=>{
       ${ev.dayDates?`<span class="ev-date-multi">${ev.dayDates.map((d,i)=>`<span class="ev-day-pair"><span class="ev-day-num">DAY${i+1}</span>${d}</span>`).join('')}</span>`:`<span class="ev-date">${ev.ds}</span>`}
     </div>
     <div class="ev-venue">${ev.venue}${ev.note?` — <span style="color:var(--accent);font-size:11px">${ev.note}</span>`:''}</div>
-    <div class="ev-acts">${preview}</div>
-    <div class="ev-foot">
-      <span class="ev-ticket">${ev.ticket}</span>
-    </div>`;
+    <div class="ev-acts">${preview}</div>`;
 
   el.addEventListener('click',()=>openDrawer(ev,false));
   listEl.appendChild(el);
