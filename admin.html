@@ -521,6 +521,20 @@ function openEdit(idx){
     ];
   }
 
+  // localStorageのvidsをマージ（index.htmlで投稿済みの動画を引き継ぐ）
+  try{
+    const store=JSON.parse(localStorage.getItem('nibanme_data')||'{}');
+    let gi=0;
+    [...formActs[0],...(isTwoDay?formActs[1]:[])].forEach(a=>{
+      const loc=store['v'+ev.vol+'_'+gi++];
+      if(loc&&loc.videos&&loc.videos.length){
+        const s=new Set(a.vids);
+        loc.videos.forEach(v=>s.add(v));
+        a.vids=[...s];
+      }
+    });
+  }catch(e){}
+
   // Cmts
   formCmts=(ev.cmts||[]).map(c=>({h:c.h||'',d:c.d||'',t:c.t||'',url:c.url||''}));
 
