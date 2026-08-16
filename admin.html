@@ -281,9 +281,12 @@ async function loadEvents(){
 }
 
 async function saveEvents(msg){
-  const content=btoa(unescape(encodeURIComponent(JSON.stringify(events,null,2))));
   showStatus('editStatus','保存中…','info');
   try{
+    // 常に最新SHAを取得してから保存（git直接pushとの競合を防ぐ）
+    const r0=await fetch(API+'?t='+Date.now(),{headers:ghHeaders()});
+    if(r0.ok){const d0=await r0.json();sha=d0.sha;}
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(events,null,2))));
     const r=await fetch(API,{
       method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},
       body:JSON.stringify({message:msg||'Update events via admin',content,sha,branch:BRANCH})
@@ -328,9 +331,11 @@ function deleteEv(i){
   saveEventsFromList(label+'を削除');
 }
 async function saveEventsFromList(msg){
-  const content=btoa(unescape(encodeURIComponent(JSON.stringify(events,null,2))));
   showStatus('statusBar','保存中…','info');
   try{
+    const r0=await fetch(API+'?t='+Date.now(),{headers:ghHeaders()});
+    if(r0.ok){const d0=await r0.json();sha=d0.sha;}
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(events,null,2))));
     const r=await fetch(API,{
       method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},
       body:JSON.stringify({message:msg||'Update events',content,sha,branch:BRANCH})
