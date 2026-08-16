@@ -1140,36 +1140,59 @@
     "venue": "新栄SiX-DOG",
     "ticket": "¥1,000",
     "open": "16:30 / 17:00",
-    "flyer": 91830864178,
     "note": "6バンド全てBUMP OF CHICKEN！BGMも全曲！",
+    "flyer": 91830864178,
     "acts": [
       {
         "c": "アロエ",
-        "o": "BUMP OF CHICKEN"
+        "o": "BUMP OF CHICKEN",
+        "vids": [
+          "https://youtu.be/ECUyo2i9MC0"
+        ]
       },
       {
         "c": "Bamps",
-        "o": "BUMP OF CHICKEN"
+        "o": "BUMP OF CHICKEN",
+        "vids": [
+          "https://youtu.be/DanFRjdUJrM"
+        ]
       },
       {
         "c": "foundgirl",
-        "o": "BUMP OF CHICKEN"
+        "o": "BUMP OF CHICKEN",
+        "vids": [
+          "https://youtu.be/W4WjUGTTo_0",
+          "https://youtu.be/-OeMSj05SV0"
+        ]
       },
       {
         "c": "BUMP OF THE YEAR ～3年連続受賞～",
-        "o": "BUMP OF CHICKEN"
+        "o": "BUMP OF CHICKEN",
+        "vids": [
+          "https://youtu.be/uSQ11SQwQaA"
+        ]
       },
       {
         "c": "DARK OF CHICKEN",
-        "o": "BUMP OF CHICKEN"
+        "o": "BUMP OF CHICKEN",
+        "vids": [
+          "https://youtu.be/ogWtVzDF2_c"
+        ]
       },
       {
         "c": "激渋BOYS&GIRLS",
-        "o": "BUMP OF CHICKEN"
+        "o": "BUMP OF CHICKEN",
+        "vids": [
+          "https://youtu.be/LdwoD7cYeg4"
+        ]
       },
       {
         "c": "シャルカノ",
-        "o": "BUMP OF CHICKEN"
+        "o": "BUMP OF CHICKEN",
+        "vids": [
+          "https://youtu.be/tGZjgu_F4O8",
+          "https://youtu.be/WtAZBIBwcbw"
+        ]
       }
     ]
   },
