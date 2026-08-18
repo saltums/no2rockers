@@ -1171,7 +1171,7 @@ function closeDrawer(){
     const acts=allActs();
     const origMap={},bandMap={};
     acts.forEach(({a,vol})=>{
-      if(a.o&&a.o!=='—')origMap[a.o]=(origMap[a.o]||0)+1;
+      if(a.o&&a.o!=='—'&&a.o!=='バンド名未定')origMap[a.o]=(origMap[a.o]||0)+1;
       if(!bandMap[a.c])bandMap[a.c]={n:0,vols:new Set()};
       bandMap[a.c].n++;
       bandMap[a.c].vols.add(vol);
