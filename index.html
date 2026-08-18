@@ -311,6 +311,55 @@ body[data-admin="1"] .adm-sync-btn{display:flex}
 }
 .adm-page-btn:hover{background:var(--accent);color:#fff}
 body[data-admin="1"] .adm-page-btn{display:flex}
+
+/* STATS */
+.stats-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;transition:all .18s;
+}
+.stats-btn:hover{border-color:var(--accent)}
+.stats-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:900;opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.stats-overlay.on{opacity:1;pointer-events:auto}
+.stats-modal{
+  background:var(--bg);border-radius:16px;width:min(92vw,440px);
+  max-height:80vh;display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,.28);
+}
+.stats-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px 12px;border-bottom:1px solid var(--rule);flex-shrink:0;
+}
+.stats-title{font-weight:700;font-size:15px;letter-spacing:.04em}
+.stats-close{font-size:20px;line-height:1;color:var(--fg2);padding:0 2px}
+.stats-body{overflow-y:auto;padding:18px 18px 24px}
+.stats-section{margin-bottom:24px}
+.stats-section:last-child{margin-bottom:0}
+.stats-section-title{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--fg2);margin-bottom:10px;
+}
+.stats-row{
+  display:flex;align-items:center;gap:10px;padding:6px 0;
+  border-bottom:1px solid var(--rule);
+}
+.stats-row:last-child{border-bottom:none}
+.stats-rank{
+  width:22px;text-align:right;font-size:12px;color:var(--fg2);
+  font-variant-numeric:tabular-nums;flex-shrink:0;
+}
+.stats-rank-gold{color:#c9940a;font-weight:700}
+.stats-name{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stats-count{
+  font-size:13px;font-variant-numeric:tabular-nums;
+  color:var(--accent);font-weight:600;flex-shrink:0;
+}
+.stats-sub{font-size:11px;color:var(--fg2);flex-shrink:0}
+
 .adm-sync-overlay{
   position:fixed;inset:0;z-index:1600;background:rgba(0,0,0,.55);
   display:none;align-items:center;justify-content:center;
@@ -619,6 +668,7 @@ body[data-admin] .act-edit-btn{display:inline-flex}
       <a href="https://www.youtube.com/@%E6%B0%B8%E9%81%A0%E3%81%AE%E4%BA%8C%E7%95%AA%E6%89%8B%E3%83%AD%E3%83%83%E3%82%AF%E3%83%95%E3%82%A7%E3%82%B9" class="hd-yt-btn" target="_blank" rel="noopener" title="YouTube チャンネル">▶</a>
       <a href="https://x.com/no2rockers" class="hd-x-btn" target="_blank" rel="noopener" title="@no2rockers on X">𝕏</a>
       <button class="theme-btn" id="themeBtn" title="テーマ切替">◐</button>
+      <button class="stats-btn" id="statsBtn" title="統計・ランキング">📊</button>
       <button class="adm-sync-btn" id="admSyncBtn" title="クラウド同期">☁</button>
       <a class="adm-page-btn" href="admin.html" title="管理画面を開く">🛠</a>
       <button class="adm-btn" id="admBtn" title="Admin">⚙</button>
@@ -646,6 +696,17 @@ body[data-admin] .act-edit-btn{display:inline-flex}
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="イベント詳細">
   <div class="dr-handle-wrap"><div class="dr-handle"></div></div>
   <div class="dr-scroll"><div class="dr-inner" id="drContent"></div></div>
+</div>
+
+<!-- 統計オーバーレイ -->
+<div class="stats-overlay" id="statsOverlay">
+  <div class="stats-modal">
+    <div class="stats-hd">
+      <span class="stats-title">統計・ランキング</span>
+      <button class="stats-close" id="statsClose">×</button>
+    </div>
+    <div class="stats-body" id="statsBody"></div>
+  </div>
 </div>
 
 <!-- 管理者ログインモーダル -->
@@ -940,6 +1001,7 @@ const overlay=document.getElementById('overlay');
 const drawer=document.getElementById('drawer');
 const drContent=document.getElementById('drContent');
 let currentEv=null;
+let _drawerOpenedAt=0;
 let _actMap={};
 
 function actKey(vol,idx){return 'v'+vol+'_'+idx;}
@@ -1077,13 +1139,74 @@ function openDrawer(ev,showCmts){
   overlay.classList.add('on');
   document.body.style.overflow='hidden';
   drContent.parentElement.scrollTop=0;
+  history.replaceState(null,'','#vol'+ev.vol);
+  _drawerOpenedAt=Date.now();
 }
 
 function closeDrawer(){
   drawer.classList.remove('on');
   overlay.classList.remove('on');
   document.body.style.overflow='';
+  history.replaceState(null,'',location.pathname+location.search);
 }
+
+// STATS
+(function(){
+  const statsOverlay=document.getElementById('statsOverlay');
+  const statsBody=document.getElementById('statsBody');
+  document.getElementById('statsBtn').addEventListener('click',openStats);
+  document.getElementById('statsClose').addEventListener('click',()=>statsOverlay.classList.remove('on'));
+  statsOverlay.addEventListener('click',e=>{if(e.target===statsOverlay)statsOverlay.classList.remove('on');});
+
+  function allActs(){
+    const out=[];
+    EVS.forEach(ev=>{
+      if(ev.days)ev.days.forEach(d=>d.acts.forEach(a=>out.push({a,vol:ev.vol})));
+      else if(ev.acts)ev.acts.forEach(a=>out.push({a,vol:ev.vol}));
+    });
+    return out;
+  }
+
+  function openStats(){
+    const acts=allActs();
+    const origMap={},bandMap={};
+    acts.forEach(({a,vol})=>{
+      origMap[a.o]=(origMap[a.o]||0)+1;
+      if(!bandMap[a.c])bandMap[a.c]={n:0,vols:new Set()};
+      bandMap[a.c].n++;
+      bandMap[a.c].vols.add(vol);
+    });
+
+    const topOrigs=Object.entries(origMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    const topBands=Object.entries(bandMap).sort((a,b)=>b[1].n-a[1].n).slice(0,10);
+
+    function rankClass(i){return i===0?'stats-rank stats-rank-gold':'stats-rank';}
+    function rowsOrigs(){return topOrigs.map(([name,n],i)=>`
+      <div class="stats-row">
+        <span class="${rankClass(i)}">${i+1}</span>
+        <span class="stats-name">${name}</span>
+        <span class="stats-count">${n}回</span>
+      </div>`).join('');}
+    function rowsBands(){return topBands.map(([name,{n,vols}],i)=>`
+      <div class="stats-row">
+        <span class="${rankClass(i)}">${i+1}</span>
+        <span class="stats-name">${name}</span>
+        <span class="stats-count">${n}回</span>
+        <span class="stats-sub">${vols.size}公演</span>
+      </div>`).join('');}
+
+    statsBody.innerHTML=`
+      <div class="stats-section">
+        <div class="stats-section-title">最多コピーされたアーティスト Top10</div>
+        ${rowsOrigs()}
+      </div>
+      <div class="stats-section">
+        <div class="stats-section-title">最多出演コピーバンド</div>
+        ${rowsBands()}
+      </div>`;
+    statsOverlay.classList.add('on');
+  }
+})();
 
 // VIDEO MODAL
 const vidOverlay=document.getElementById('vidOverlay');
@@ -1109,7 +1232,7 @@ function closeVidModal(){
 vidModalClose.addEventListener('click',closeVidModal);
 vidOverlay.addEventListener('click',e=>{if(e.target===vidOverlay)closeVidModal();});
 
-overlay.addEventListener('click',closeDrawer);
+overlay.addEventListener('click',()=>{if(Date.now()-_drawerOpenedAt>400)closeDrawer();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
 
 let ty0=0;
