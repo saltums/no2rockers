@@ -1,86 +1,328 @@
 {
-  "04 Limited Sazabys": "https://www.04limitedsazabys.com/",
-  "10-FEET": "https://10-feet.kyoto/",
-  "6% is Mine": "http://sixpercentismine.net/pc/",
-  "a flood of circle": "https://afloodofcircle.com/",
-  "a flood of circle（acoustic）": "https://afloodofcircle.com/",
-  "aiko": "https://www.aikonet.com/",
-  "andymori": "https://ja.wikipedia.org/wiki/andymori",
-  "ART-SCHOOL": "https://www.sonymusic.co.jp/artist/art-school/",
-  "ASIAN KUNG-FU GENERATION": "https://www.asiankung-fu.com/",
-  "back number": "https://www.universal-music.co.jp/backnumber/",
-  "Base Ball Bear": "https://www.baseballbear.com/",
-  "BUMP OF CHICKEN": "https://www.bumpofchicken.com/",
-  "B'z": "https://www.bz-vermillion.com/",
-  "cinema staff": "https://cinemastaff.net/",
-  "EGG BRAIN": "https://eggbrain.jp/",
-  "ELLEGARDEN 等": "https://www.ellegarden.jp/",
-  "FLOW": "https://ja.wikipedia.org/wiki/FLOW",
-  "GO!GO!7188": "https://ja.wikipedia.org/wiki/GO!GO!7188",
-  "go!go!vanillas": "https://gogovanillas.com/",
-  "GOING UNDER GROUND": "https://goingunderground.tokyo/",
-  "GRAPEVINE": "https://www.grapevineonline.jp/",
-  "indigo la End": "https://indigolaend.com/",
-  "JUDY AND MARY": "https://ja.wikipedia.org/wiki/JUDY_AND_MARY",
-  "KANA-BOON": "https://sp.kanaboon.jp/",
-  "LiSA": "https://www.lxixsxa.com/",
-  "MAN WITH A MISSION": "https://www.mwamjapan.info/",
-  "Mr.Children": "https://www.mrchildren.jp/",
-  "Northern19": "https://www.northern19.com/",
-  "Nothing's Carved In Stone": "https://ncis.jp/",
-  "ONE OK ROCK": "https://www.oneokrock.com/jp/",
-  "ORANGE RANGE": "https://orangerange.com/",
-  "PENGUIN RESEARCH": "https://www.sonymusic.co.jp/artist/penguinresearch/",
-  "plenty": "https://ja.wikipedia.org/wiki/plenty",
-  "RADWIMPS": "https://radwimps.jp/",
-  "Rhythmic Toy World": "https://rhythmictoyworld.com/",
-  "SEKAI NO OWARI": "https://sekainoowari.jp/",
-  "SHISHAMO": "https://shishamo.biz/",
-  "Stan": "https://columbia.jp/artist-info/stan/",
-  "suchmos": "https://www.suchmos.com/",
-  "sumika": "https://www.sumika-official.com/",
-  "SUPER BEAVER": "https://www.sonymusic.co.jp/artist/superbeaver/",
-  "Superfly": "https://www.superfly-web.com/",
-  "Syrup16g": "http://www.syrup16g.jp/",
-  "THE BACK HORN": "https://www.thebackhorn.com/",
-  "the band apart": "https://ja.wikipedia.org/wiki/The_band_apart",
-  "THE BAWDIES": "https://thebawdies.com/",
-  "THE ORAL CIGARETTES": "https://theoralcigarettes.com/",
-  "the pillows": "https://pillows.jp/",
-  "THE PINBALLS": "https://columbia.jp/artist-info/pinballs/",
-  "The SALOVERS": "https://ja.wikipedia.org/wiki/The_SALOVERS",
-  "THEE MICHELLE GUN ELEPHANT": "https://ja.wikipedia.org/wiki/THEE_MICHELLE_GUN_ELEPHANT",
-  "UNISON SQUARE GARDEN": "https://unison-s-g.com/",
-  "WANIMA": "https://wanima.net/",
-  "WHITE ASH": "https://ja.wikipedia.org/wiki/WHITE_ASH",
-  "yonige": "https://yonige.net/",
-  "YUI": "https://www.sonymusic.co.jp/artist/yui/",
-  "クリープハイプ": "https://www.creephyp.com/",
-  "ゲスの極み乙女。": "https://gesuotome.com/",
-  "ザ・50回転ズ": "https://www.50kaitenz.net/",
-  "サカナクション": "https://sakanaction.jp/",
-  "ストレイテナー": "https://www.straightener.net/",
-  "スピッツ": "https://spitz.co.jp/",
-  "ソウルフード": "https://ja.wikipedia.org/wiki/ソウルフード_(バンド)",
-  "チャットモンチー": "https://ja.wikipedia.org/wiki/チャットモンチー",
-  "チリヌルヲワカ": "https://www.chirinuruwowaka.jp/top2/",
-  "ハヌマーン": "https://ja.wikipedia.org/wiki/ハヌマーン_(バンド)",
-  "ハンブレッターズ": "https://humbreaders.com/",
-  "フジファブリック": "https://www.fujifabric.com/",
-  "マキシマム ザ ホルモン": "https://www.55mth.com/",
-  "モーモールルギャバン": "https://mowmowlulugyaban.com/",
-  "ゆらゆら帝国": "https://ja.wikipedia.org/wiki/ゆらゆら帝国",
-  "ヨルシカ": "https://yorushika.com/",
-  "レミオロメン": "https://ja.wikipedia.org/wiki/レミオロメン",
-  "阿部真央": "https://ja.wikipedia.org/wiki/阿部真央",
-  "斎藤和義": "https://www.kazuyoshi-saito.com/",
-  "星野源": "https://www.hoshinogen.com/",
-  "赤い公園": "https://ja.wikipedia.org/wiki/赤い公園",
-  "相対性理論": "https://ja.wikipedia.org/wiki/相対性理論_(バンド)",
-  "東京カランコロン": "https://ja.wikipedia.org/wiki/東京カランコロン",
-  "東京事変": "https://www.tokyojihen.com/",
-  "美波": "https://wmg.jp/373",
-  "忘れらんねえよ": "https://www.office-augusta.com/wasureranneyo/",
-  "藍坊主": "https://aobozu.com/",
-  "凛として時雨": "https://www.sigure.jp/"
+  "GRAPEVINE": {
+    "web": "https://www.grapevineonline.jp/",
+    "x": "https://x.com/news_grapevine"
+  },
+  "凛として時雨": {
+    "web": "https://www.sigure.jp/",
+    "x": "https://x.com/sigure_official"
+  },
+  "6% is Mine": {
+    "web": "http://sixpercentismine.net/pc/"
+  },
+  "Base Ball Bear": {
+    "web": "https://www.baseballbear.com/",
+    "x": "https://x.com/BBB_Staff",
+    "ig": "https://www.instagram.com/baseballbear_official/"
+  },
+  "Nothing's Carved In Stone": {
+    "web": "https://ncis.jp/",
+    "x": "https://x.com/NCIS_BANDS"
+  },
+  "a flood of circle（acoustic）": {
+    "web": "https://afloodofcircle.com/",
+    "x": "https://x.com/afoc_official",
+    "ig": "https://www.instagram.com/a_flood_of_circle_official/"
+  },
+  "04 Limited Sazabys": {
+    "web": "https://www.04limitedsazabys.com/",
+    "x": "https://x.com/04LS_nagoya"
+  },
+  "WHITE ASH": {
+    "web": "https://ja.wikipedia.org/wiki/WHITE_ASH"
+  },
+  "ストレイテナー": {
+    "web": "https://www.straightener.net/",
+    "x": "https://x.com/straightenerjp",
+    "ig": "https://www.instagram.com/straightener.jp/"
+  },
+  "WANIMA": {
+    "web": "https://wanima.net/",
+    "x": "https://x.com/WANIMA_OFFICIAL"
+  },
+  "ソウルフード": {
+    "web": "https://ja.wikipedia.org/wiki/ソウルフード_(バンド)"
+  },
+  "クリープハイプ": {
+    "web": "https://www.creephyp.com/",
+    "x": "https://x.com/creephyp"
+  },
+  "aiko": {
+    "web": "https://www.aikonet.com/",
+    "x": "https://x.com/aiko_dochibi"
+  },
+  "東京カランコロン": {
+    "web": "https://ja.wikipedia.org/wiki/東京カランコロン"
+  },
+  "BUMP OF CHICKEN": {
+    "web": "https://www.bumpofchicken.com/",
+    "x": "https://x.com/boc_official_"
+  },
+  "sumika": {
+    "web": "https://www.sumika-official.com/",
+    "x": "https://x.com/sumika_inc"
+  },
+  "yonige": {
+    "web": "https://yonige.net/",
+    "x": "https://x.com/_yonige"
+  },
+  "ORANGE RANGE": {
+    "web": "https://orangerange.com/",
+    "x": "https://x.com/orangerangenow"
+  },
+  "藍坊主": {
+    "web": "https://aobozu.com/",
+    "x": "https://x.com/aobozu_staff"
+  },
+  "Northern19": {
+    "web": "https://www.northern19.com/",
+    "x": "https://x.com/N19_OFFICIAL"
+  },
+  "GOING UNDER GROUND": {
+    "web": "https://goingunderground.tokyo/",
+    "x": "https://x.com/official_gug"
+  },
+  "LiSA": {
+    "web": "https://www.lxixsxa.com/",
+    "x": "https://x.com/LiSA_OLiVE"
+  },
+  "THE PINBALLS": {
+    "web": "https://columbia.jp/artist-info/pinballs/",
+    "x": "https://x.com/PINS_official"
+  },
+  "チリヌルヲワカ": {
+    "web": "https://www.chirinuruwowaka.jp/top2/"
+  },
+  "PENGUIN RESEARCH": {
+    "web": "https://www.sonymusic.co.jp/artist/penguinresearch/",
+    "x": "https://x.com/PGR_info"
+  },
+  "indigo la End": {
+    "web": "https://indigolaend.com/",
+    "x": "https://x.com/indigo_la_End"
+  },
+  "MAN WITH A MISSION": {
+    "web": "https://www.mwamjapan.info/",
+    "x": "https://x.com/MWAMofficial"
+  },
+  "相対性理論": {
+    "web": "https://ja.wikipedia.org/wiki/相対性理論_(バンド)"
+  },
+  "チャットモンチー": {
+    "web": "https://ja.wikipedia.org/wiki/チャットモンチー"
+  },
+  "忘れらんねえよ": {
+    "web": "https://www.office-augusta.com/wasureranneyo/",
+    "x": "https://x.com/wasureranneyo"
+  },
+  "EGG BRAIN": {
+    "web": "https://eggbrain.jp/",
+    "x": "https://x.com/eggbrain_kobe"
+  },
+  "RADWIMPS": {
+    "web": "https://radwimps.jp/",
+    "x": "https://x.com/radwimps",
+    "ig": "https://www.instagram.com/radwimps_jp/"
+  },
+  "サカナクション": {
+    "web": "https://sakanaction.jp/",
+    "x": "https://x.com/sakanaction"
+  },
+  "フジファブリック": {
+    "web": "https://www.fujifabric.com/",
+    "x": "https://x.com/Fujifabric_info"
+  },
+  "ONE OK ROCK": {
+    "web": "https://www.oneokrock.com/jp/",
+    "x": "https://x.com/oneokrockworld",
+    "ig": "https://www.instagram.com/oneokrockworld/"
+  },
+  "The SALOVERS": {
+    "web": "https://ja.wikipedia.org/wiki/The_SALOVERS"
+  },
+  "SHISHAMO": {
+    "web": "https://shishamo.biz/",
+    "x": "https://x.com/SHISHAMO_BAND"
+  },
+  "the band apart": {
+    "web": "https://ja.wikipedia.org/wiki/The_band_apart"
+  },
+  "B'z": {
+    "web": "https://www.bz-vermillion.com/",
+    "x": "https://x.com/Bz_Official"
+  },
+  "SUPER BEAVER": {
+    "web": "https://www.sonymusic.co.jp/artist/superbeaver/",
+    "x": "https://x.com/super_beaver"
+  },
+  "THEE MICHELLE GUN ELEPHANT": {
+    "web": "https://ja.wikipedia.org/wiki/THEE_MICHELLE_GUN_ELEPHANT"
+  },
+  "plenty": {
+    "web": "https://ja.wikipedia.org/wiki/plenty"
+  },
+  "andymori": {
+    "web": "https://ja.wikipedia.org/wiki/andymori"
+  },
+  "Stan": {
+    "web": "https://columbia.jp/artist-info/stan/"
+  },
+  "ザ・50回転ズ": {
+    "web": "https://www.50kaitenz.net/",
+    "x": "https://x.com/50Kaitenz"
+  },
+  "suchmos": {
+    "web": "https://www.suchmos.com/",
+    "x": "https://x.com/suchmoz"
+  },
+  "モーモールルギャバン": {
+    "web": "https://mowmowlulugyaban.com/",
+    "x": "https://x.com/MLG_band"
+  },
+  "マキシマム ザ ホルモン": {
+    "web": "https://www.55mth.com/",
+    "x": "https://x.com/MTH_OFFICIAL"
+  },
+  "UNISON SQUARE GARDEN": {
+    "web": "https://unison-s-g.com/",
+    "x": "https://x.com/USGinfo"
+  },
+  "Syrup16g": {
+    "web": "http://www.syrup16g.jp/",
+    "x": "https://x.com/syrup16g_staff"
+  },
+  "ELLEGARDEN 等": {
+    "web": "https://www.ellegarden.jp/",
+    "x": "https://x.com/ELLEGARDEN_OFCL"
+  },
+  "東京事変": {
+    "web": "https://www.tokyojihen.com/",
+    "x": "https://x.com/Nekoyanagi_Line"
+  },
+  "Superfly": {
+    "web": "https://www.superfly-web.com/",
+    "x": "https://x.com/Superfly_staff"
+  },
+  "Mr.Children": {
+    "web": "https://www.mrchildren.jp/",
+    "x": "https://x.com/mc_official_jp"
+  },
+  "ヨルシカ": {
+    "web": "https://yorushika.com/",
+    "x": "https://x.com/nbuna_staff"
+  },
+  "斎藤和義": {
+    "web": "https://www.kazuyoshi-saito.com/",
+    "x": "https://x.com/saitokazuyoshi"
+  },
+  "ゆらゆら帝国": {
+    "web": "https://ja.wikipedia.org/wiki/ゆらゆら帝国"
+  },
+  "ハヌマーン": {
+    "web": "https://ja.wikipedia.org/wiki/ハヌマーン_(バンド)"
+  },
+  "YUI": {
+    "web": "https://www.sonymusic.co.jp/artist/yui/"
+  },
+  "美波": {
+    "web": "https://wmg.jp/373",
+    "x": "https://x.com/373STAFF"
+  },
+  "ART-SCHOOL": {
+    "web": "https://www.sonymusic.co.jp/artist/art-school/",
+    "x": "https://x.com/ART__OFFICIAL"
+  },
+  "星野源": {
+    "web": "https://www.hoshinogen.com/",
+    "x": "https://x.com/gen_senden",
+    "ig": "https://www.instagram.com/iamgenhoshino/"
+  },
+  "THE BAWDIES": {
+    "web": "https://thebawdies.com/",
+    "x": "https://x.com/THE_BAWDIES"
+  },
+  "go!go!vanillas": {
+    "web": "https://gogovanillas.com/",
+    "x": "https://x.com/go_go_vanillas"
+  },
+  "赤い公園": {
+    "web": "https://ja.wikipedia.org/wiki/赤い公園"
+  },
+  "the pillows": {
+    "web": "https://pillows.jp/",
+    "x": "https://x.com/thepillowsJPN"
+  },
+  "ハンブレッターズ": {
+    "web": "https://humbreaders.com/",
+    "x": "https://x.com/Humbreaders",
+    "ig": "https://www.instagram.com/humbreaders/"
+  },
+  "THE ORAL CIGARETTES": {
+    "web": "https://theoralcigarettes.com/",
+    "x": "https://x.com/oral_official",
+    "ig": "https://www.instagram.com/the_oral_cigarettes_official/"
+  },
+  "JUDY AND MARY": {
+    "web": "https://ja.wikipedia.org/wiki/JUDY_AND_MARY"
+  },
+  "FLOW": {
+    "web": "https://ja.wikipedia.org/wiki/FLOW",
+    "x": "https://x.com/FLOW_official"
+  },
+  "SEKAI NO OWARI": {
+    "web": "https://sekainoowari.jp/",
+    "x": "https://x.com/SekaiNoOwariOFC"
+  },
+  "back number": {
+    "web": "https://www.universal-music.co.jp/backnumber/",
+    "x": "https://x.com/backnumberstaff"
+  },
+  "KANA-BOON": {
+    "web": "https://sp.kanaboon.jp/",
+    "x": "https://x.com/_kanaboon"
+  },
+  "THE BACK HORN": {
+    "web": "https://www.thebackhorn.com/",
+    "x": "https://x.com/THEBACKHORNnews"
+  },
+  "ゲスの極み乙女。": {
+    "web": "https://gesuotome.com/",
+    "x": "https://x.com/gesu_otome"
+  },
+  "cinema staff": {
+    "web": "https://cinemastaff.net/",
+    "x": "https://x.com/cinemastaff_"
+  },
+  "スピッツ": {
+    "web": "https://spitz.co.jp/",
+    "x": "https://x.com/spitzmobile"
+  },
+  "ASIAN KUNG-FU GENERATION": {
+    "web": "https://www.asiankung-fu.com/",
+    "x": "https://x.com/AKG_information"
+  },
+  "GO!GO!7188": {
+    "web": "https://ja.wikipedia.org/wiki/GO!GO!7188"
+  },
+  "Rhythmic Toy World": {
+    "web": "https://rhythmictoyworld.com/",
+    "x": "https://x.com/R_Toy_World",
+    "ig": "https://www.instagram.com/rhythmic_toy_world/"
+  },
+  "a flood of circle": {
+    "web": "https://afloodofcircle.com/",
+    "x": "https://x.com/afoc_official",
+    "ig": "https://www.instagram.com/a_flood_of_circle_official/"
+  },
+  "レミオロメン": {
+    "web": "https://ja.wikipedia.org/wiki/レミオロメン"
+  },
+  "10-FEET": {
+    "web": "https://10-feet.kyoto/",
+    "x": "https://x.com/10FEET_OFFICIAL"
+  },
+  "阿部真央": {
+    "web": "https://ja.wikipedia.org/wiki/阿部真央",
+    "x": "https://x.com/abemao_official"
+  }
 }

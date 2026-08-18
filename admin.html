@@ -95,10 +95,11 @@ textarea{resize:vertical;min-height:70px}
 /* ── SETTINGS ── */
 .settings-modal .modal-body{gap:14px}
 /* ── ARTIST LINKS ── */
-.link-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.link-row{display:grid;grid-template-columns:160px 1fr 1fr 1fr 28px;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border)}
 .link-row:last-child{border-bottom:none}
-.link-name{flex:0 0 190px}
-.link-url{flex:1}
+.link-icon-label{font-size:11px;color:var(--fg2);text-align:center;line-height:1;margin-bottom:2px}
+.link-header{display:grid;grid-template-columns:160px 1fr 1fr 1fr 28px;gap:6px;padding:2px 0 6px;font-size:11px;color:var(--fg2)}
+.link-header span:first-child{}
 </style>
 </head>
 <body>
@@ -144,7 +145,7 @@ textarea{resize:vertical;min-height:70px}
 <div class="overlay" id="linksOverlay">
   <div class="modal" style="max-width:600px">
     <div class="modal-header">
-      <h2>アーティスト公式サイト</h2>
+      <h2>アーティストリンク</h2>
       <button class="btn-icon" id="linksClose">✕</button>
     </div>
     <div class="modal-body" id="linksBody" style="max-height:60vh;overflow-y:auto"></div>
@@ -689,7 +690,10 @@ async function loadLinks(){
     const d=await r.json();
     linksSha=d.sha;
     const obj=JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,'')))));
-    linkRows=Object.entries(obj).map(([name,url])=>({name,url}));
+    linkRows=Object.entries(obj).map(([name,val])=>{
+      const v=typeof val==='string'?{web:val,x:'',ig:''}:val;
+      return {name,web:v.web||'',x:v.x||'',ig:v.ig||''};
+    });
     renderLinks();
     showStatus('linksStatus','','');
   }catch(e){showStatus('linksStatus','読み込み失敗: '+e.message,'err');}
@@ -697,14 +701,19 @@ async function loadLinks(){
 
 function renderLinks(){
   const body=$('linksBody');
-  body.innerHTML=linkRows.map((row,i)=>`
+  body.innerHTML=`<div class="link-header"><span>アーティスト名</span><span>🌐 公式サイト</span><span>𝕏 X</span><span>📷 Instagram</span><span></span></div>`
+  +linkRows.map((row,i)=>`
     <div class="link-row">
       <input type="text" class="adm-input link-name" value="${esc(row.name)}" data-i="${i}" placeholder="アーティスト名">
-      <input type="url" class="adm-input link-url" value="${esc(row.url)}" data-i="${i}" placeholder="https://...">
+      <input type="url" class="adm-input link-web" value="${esc(row.web)}" data-i="${i}" placeholder="https://...">
+      <input type="url" class="adm-input link-x"   value="${esc(row.x)}"   data-i="${i}" placeholder="https://x.com/...">
+      <input type="url" class="adm-input link-ig"  value="${esc(row.ig)}"  data-i="${i}" placeholder="https://www.instagram.com/...">
       <button class="btn-icon" style="color:var(--red)" onclick="removeLink(${i})">×</button>
     </div>`).join('');
   body.querySelectorAll('.link-name').forEach(inp=>inp.addEventListener('input',e=>{linkRows[+e.target.dataset.i].name=e.target.value;}));
-  body.querySelectorAll('.link-url').forEach(inp=>inp.addEventListener('input',e=>{linkRows[+e.target.dataset.i].url=e.target.value;}));
+  body.querySelectorAll('.link-web').forEach(inp=>inp.addEventListener('input',e=>{linkRows[+e.target.dataset.i].web=e.target.value;}));
+  body.querySelectorAll('.link-x').forEach(inp=>inp.addEventListener('input',e=>{linkRows[+e.target.dataset.i].x=e.target.value;}));
+  body.querySelectorAll('.link-ig').forEach(inp=>inp.addEventListener('input',e=>{linkRows[+e.target.dataset.i].ig=e.target.value;}));
 }
 
 function removeLink(i){linkRows.splice(i,1);renderLinks();}
@@ -716,7 +725,13 @@ async function saveLinks(){
     const r0=await fetch(LINKS_API+'?t='+Date.now(),{headers:ghHeaders()});
     if(r0.ok){const d0=await r0.json();linksSha=d0.sha;}
     const obj={};
-    linkRows.filter(r=>r.name.trim()).forEach(r=>{obj[r.name.trim()]=r.url.trim();});
+    linkRows.filter(r=>r.name.trim()).forEach(r=>{
+      const v={};
+      if(r.web.trim())v.web=r.web.trim();
+      if(r.x.trim())v.x=r.x.trim();
+      if(r.ig.trim())v.ig=r.ig.trim();
+      obj[r.name.trim()]=v;
+    });
     const content=btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));
     const r=await fetch(LINKS_API,{
       method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},
@@ -731,7 +746,7 @@ async function saveLinks(){
 $('linksBtn').addEventListener('click',()=>{$('linksOverlay').classList.add('on');loadLinks();});
 $('linksClose').addEventListener('click',()=>$('linksOverlay').classList.remove('on'));
 $('linksOverlay').addEventListener('click',e=>{if(e.target===$('linksOverlay'))$('linksOverlay').classList.remove('on');});
-$('linksAddBtn').addEventListener('click',()=>{linkRows.push({name:'',url:''});renderLinks();});
+$('linksAddBtn').addEventListener('click',()=>{linkRows.push({name:'',web:'',x:'',ig:''});renderLinks();});
 $('linksSaveBtn').addEventListener('click',saveLinks);
 
 // ── INIT ──
