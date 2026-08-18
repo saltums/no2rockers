@@ -427,6 +427,8 @@ body[data-admin="1"] .adm-page-btn{display:flex}
 }
 .act-copy{font-size:14.5px;font-weight:600;flex:1;min-width:0;word-break:break-all}
 .act-orig{font-size:11.5px;color:var(--fg2);white-space:nowrap}
+.act-orig-link{color:var(--fg2);text-decoration:none;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+.act-orig-link:hover{color:var(--fg);border-bottom-color:var(--fg2)}
 .act-vid-btn{
   flex-shrink:0;display:inline-flex;align-items:center;gap:4px;
   font-size:10px;color:var(--fg3);letter-spacing:.04em;
@@ -1039,7 +1041,11 @@ function renderActRow(a,vol,idx){
   const editBtn=`<button class="act-edit-btn" data-key="${key}" data-name="${a.c.replace(/"/g,'&quot;')}">投稿 ›</button>`;
   const photoBtn=a.photos?`<button class="act-photos-btn" data-pfid="${a.photos}">📷</button>`:'';
   const photoDiv=a.photos?`<div class="pcloud-photos" data-pfid="${a.photos}"></div>`:'';
-  return `<div class="act"><span class="act-copy">${displayName}</span><span class="act-orig">(${a.o})</span>${vidBtn}${photoBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
+  const origUrl=ARTIST_LINKS[a.o];
+  const origHtml=origUrl
+    ?`<a class="act-orig act-orig-link" href="${origUrl}" target="_blank" rel="noopener">(${a.o})</a>`
+    :`<span class="act-orig">(${a.o})</span>`;
+  return `<div class="act"><span class="act-copy">${displayName}</span>${origHtml}${vidBtn}${photoBtn}${editBtn}</div>${renderActMedia(a,vol,idx)}${photoDiv}`;
 }
 
 function openDrawer(ev,showCmts){
