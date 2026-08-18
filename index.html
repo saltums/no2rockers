@@ -359,6 +359,8 @@ body[data-admin="1"] .adm-page-btn{display:flex}
   color:var(--accent);font-weight:600;flex-shrink:0;
 }
 .stats-sub{font-size:11px;color:var(--fg2);flex-shrink:0}
+.stats-name-link{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--rule);transition:color .15s,border-color .15s}
+.stats-name-link:hover{color:var(--accent);border-color:var(--accent)}
 
 .adm-sync-overlay{
   position:fixed;inset:0;z-index:1600;background:rgba(0,0,0,.55);
@@ -800,7 +802,9 @@ const IMGS={
 };
 
 let EVS=[];
+let ARTIST_LINKS={};
 fetch('events.json?t='+Date.now()).then(r=>r.json()).then(function(data){EVS=data;initEvs();}).catch(function(e){console.error('events.json load error:',e);});
+fetch('artist_links.json?t='+Date.now()).then(r=>r.json()).then(d=>{ARTIST_LINKS=d;}).catch(()=>{});
 
 // SHARE HELPERS
 const SITE_URL=location.origin+location.pathname;
@@ -1181,12 +1185,16 @@ function closeDrawer(){
     const topBands=Object.entries(bandMap).sort((a,b)=>b[1].n-a[1].n).slice(0,10);
 
     function rankClass(i){return i===0?'stats-rank stats-rank-gold':'stats-rank';}
-    function rowsOrigs(){return topOrigs.map(([name,n],i)=>`
-      <div class="stats-row">
+    function rowsOrigs(){return topOrigs.map(([name,n],i)=>{
+      const url=ARTIST_LINKS[name];
+      const nameHtml=url
+        ?`<a class="stats-name stats-name-link" href="${url}" target="_blank" rel="noopener">${name}</a>`
+        :`<span class="stats-name">${name}</span>`;
+      return `<div class="stats-row">
         <span class="${rankClass(i)}">${i+1}</span>
-        <span class="stats-name">${name}</span>
+        ${nameHtml}
         <span class="stats-count">${n}回</span>
-      </div>`).join('');}
+      </div>`;}).join('');}
     function rowsBands(){return topBands.map(([name,{n,vols}],i)=>`
       <div class="stats-row">
         <span class="${rankClass(i)}">${i+1}</span>

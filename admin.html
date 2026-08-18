@@ -94,6 +94,11 @@ textarea{resize:vertical;min-height:70px}
 
 /* ── SETTINGS ── */
 .settings-modal .modal-body{gap:14px}
+/* ── ARTIST LINKS ── */
+.link-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.link-row:last-child{border-bottom:none}
+.link-name{flex:0 0 190px}
+.link-url{flex:1}
 </style>
 </head>
 <body>
@@ -102,6 +107,7 @@ textarea{resize:vertical;min-height:70px}
 <div class="header">
   <h1>🎸 二番手フェス 管理</h1>
   <button class="btn-primary" id="addBtn">＋ イベント追加</button>
+  <button class="btn-ghost" id="linksBtn">🔗 公式サイト</button>
   <button class="btn-ghost" id="settingsBtn">⚙ GitHub設定</button>
 </div>
 
@@ -130,6 +136,22 @@ textarea{resize:vertical;min-height:70px}
     <div class="modal-footer">
       <button class="btn-ghost" id="settingsCancel">キャンセル</button>
       <button class="btn-primary" id="settingsSave">保存して読み込む</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ARTIST LINKS MODAL ── -->
+<div class="overlay" id="linksOverlay">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h2>アーティスト公式サイト</h2>
+      <button class="btn-icon" id="linksClose">✕</button>
+    </div>
+    <div class="modal-body" id="linksBody" style="max-height:60vh;overflow-y:auto"></div>
+    <div class="modal-footer">
+      <button class="btn-ghost btn-sm" id="linksAddBtn">＋ 追加</button>
+      <div id="linksStatus" class="status" style="flex:1;display:none"></div>
+      <button class="btn-primary" id="linksSaveBtn">GitHubに保存</button>
     </div>
   </div>
 </div>
@@ -653,6 +675,64 @@ $('editClose').addEventListener('click',()=>$('editOverlay').classList.remove('o
 $('editCancel').addEventListener('click',()=>$('editOverlay').classList.remove('on'));
 $('editOverlay').addEventListener('click',e=>{if(e.target===$('editOverlay'))$('editOverlay').classList.remove('on');});
 $('settingsOverlay').addEventListener('click',e=>{if(e.target===$('settingsOverlay'))$('settingsOverlay').classList.remove('on');});
+
+// ── ARTIST LINKS ──
+const LINKS_API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/artist_links.json`;
+let linkRows=[],linksSha='';
+
+async function loadLinks(){
+  if(!tok()){showSettingsModal();return;}
+  showStatus('linksStatus','読み込み中…','info');
+  try{
+    const r=await fetch(LINKS_API+'?t='+Date.now(),{headers:ghHeaders()});
+    if(!r.ok)throw new Error(`${r.status}`);
+    const d=await r.json();
+    linksSha=d.sha;
+    const obj=JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,'')))));
+    linkRows=Object.entries(obj).map(([name,url])=>({name,url}));
+    renderLinks();
+    showStatus('linksStatus','','');
+  }catch(e){showStatus('linksStatus','読み込み失敗: '+e.message,'err');}
+}
+
+function renderLinks(){
+  const body=$('linksBody');
+  body.innerHTML=linkRows.map((row,i)=>`
+    <div class="link-row">
+      <input type="text" class="adm-input link-name" value="${esc(row.name)}" data-i="${i}" placeholder="アーティスト名">
+      <input type="url" class="adm-input link-url" value="${esc(row.url)}" data-i="${i}" placeholder="https://...">
+      <button class="btn-icon" style="color:var(--red)" onclick="removeLink(${i})">×</button>
+    </div>`).join('');
+  body.querySelectorAll('.link-name').forEach(inp=>inp.addEventListener('input',e=>{linkRows[+e.target.dataset.i].name=e.target.value;}));
+  body.querySelectorAll('.link-url').forEach(inp=>inp.addEventListener('input',e=>{linkRows[+e.target.dataset.i].url=e.target.value;}));
+}
+
+function removeLink(i){linkRows.splice(i,1);renderLinks();}
+
+async function saveLinks(){
+  if(!tok()){showSettingsModal();return;}
+  showStatus('linksStatus','保存中…','info');
+  try{
+    const r0=await fetch(LINKS_API+'?t='+Date.now(),{headers:ghHeaders()});
+    if(r0.ok){const d0=await r0.json();linksSha=d0.sha;}
+    const obj={};
+    linkRows.filter(r=>r.name.trim()).forEach(r=>{obj[r.name.trim()]=r.url.trim();});
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));
+    const r=await fetch(LINKS_API,{
+      method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},
+      body:JSON.stringify({message:'Update artist links',content,sha:linksSha,branch:BRANCH})
+    });
+    if(!r.ok)throw new Error(`${r.status}`);
+    const d=await r.json();linksSha=d.content.sha;
+    showStatus('linksStatus','✓ 保存完了','ok');
+  }catch(e){showStatus('linksStatus','保存失敗: '+e.message,'err');}
+}
+
+$('linksBtn').addEventListener('click',()=>{$('linksOverlay').classList.add('on');loadLinks();});
+$('linksClose').addEventListener('click',()=>$('linksOverlay').classList.remove('on'));
+$('linksOverlay').addEventListener('click',e=>{if(e.target===$('linksOverlay'))$('linksOverlay').classList.remove('on');});
+$('linksAddBtn').addEventListener('click',()=>{linkRows.push({name:'',url:''});renderLinks();});
+$('linksSaveBtn').addEventListener('click',saveLinks);
 
 // ── INIT ──
 loadEvents();
